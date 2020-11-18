@@ -9,9 +9,41 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.Qt import Qt
 
+class Ui_Form(QtWidgets.QWidget):
 
-class Ui_Form(object):
+    def __init__(self):
+        super().__init__()
+
+    def keyPressEvent(self,event):
+        print("key press event fired")
+
+        if event.key() == 16777234:
+            #its left arrow button
+            print("left arrow pressed")
+        elif event.key() == 16777235:
+            #its up arrow button
+            print("up arrow pressed")
+        elif event.key() == 16777236:
+            #its right arrow button
+            print("right arrow pressed")
+        elif event.key() == 16777237:
+            #its down arrow button
+            print("down arrow pressed")
+        elif event.key() == 65:
+            #its a button
+            print("Button A was pressed")
+        elif event.key() == 87:
+            #its w button
+            print("Button W was pressed")
+        elif event.key() == 68:
+            #its d button
+            print("Button D was pressed")
+        elif event.key() == 83:
+            #its s button
+            print("Button S was pressed")
+
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(1278, 875)
@@ -346,10 +378,12 @@ class Ui_Form(object):
         self.label_64.setGeometry(QtCore.QRect(790, 70, 51, 16))
         self.label_64.setObjectName("label_64")
         self.gridLayout.addWidget(self.frame_4, 2, 1, 1, 2)
+        
+        self.grabKeyboard()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
+    
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Prometheus"))
@@ -439,7 +473,6 @@ class Ui_Form(object):
         self.label_62.setText(_translate("Form", "61%"))
         self.label_63.setText(_translate("Form", "4"))
         self.label_64.setText(_translate("Form", "8m"))
-
 
 if __name__ == "__main__":
     import sys

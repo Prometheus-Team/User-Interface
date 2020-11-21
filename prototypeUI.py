@@ -11,6 +11,39 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.Qt import Qt
 
+stylesheet = '''
+
+#Form{
+    background-color:#191818;
+}
+
+QPushButton{
+	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+	background-color:#79bbff;
+	border-radius:10px;
+	color:#ffffff;
+	font-family:Trebuchet MS;
+	font-size:12px;
+	font-weight:bold;
+	text-decoration:none;
+}
+
+QLabel{
+    color:#ffffff;
+	font-family:Trebuchet MS;
+	font-size:12px;
+    font-weight:bold;
+}
+
+QComboBox{
+    background-color:#79bbff;
+    color:#ffffff;
+	font-family:Trebuchet MS;
+	font-size:12px;
+    font-weight:bold;
+}
+'''
+
 class Ui_Form(QtWidgets.QWidget):
 
     def __init__(self):
@@ -102,7 +135,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.frame_3.setMidLineWidth(2)
         self.frame_3.setObjectName("frame_3")
         self.openGLWidget = QtWidgets.QOpenGLWidget(self.frame_3)
-        self.openGLWidget.setGeometry(QtCore.QRect(10, 10, 411, 491))
+        self.openGLWidget.setGeometry(QtCore.QRect(10, 10, 395, 491))
         self.openGLWidget.setObjectName("openGLWidget")
         self.pushButton_6 = QtWidgets.QPushButton(self.frame_3)
         self.pushButton_6.setGeometry(QtCore.QRect(100, 520, 51, 26))
@@ -477,6 +510,7 @@ class Ui_Form(QtWidgets.QWidget):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyleSheet(stylesheet)
     Form = QtWidgets.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)

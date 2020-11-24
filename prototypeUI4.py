@@ -44,7 +44,7 @@ stylesheet = '''
 
 QPushButton{
     background:linear-gradient(to bottom, #c62d1f 5%, #f24437 100%);
-	background-color:#111;
+	background-color:#333;
 	border-radius:2px;
 	color:#eee;
 	font-family:Trebuchet MS;
@@ -53,11 +53,12 @@ QPushButton{
 }
 
 QFrame{ 
-    background-color: #555;
+    background-color: #444;
+	border-radius:2px;
 }
 
 QLabel{
-    color:#ddd;
+    color:#bbb;
 	font-family:Trebuchet MS;
 	font-size:12px;
 }
@@ -68,8 +69,8 @@ QLabel[cssClass="values"]{
 }
 
 QLabel[cssClass="titles"]{
-    color:#DF861D;
-    font-size:18px;
+    color:#e91;
+    font-size:15px;
 }
 
 QLabel[cssClass="title2"]{
@@ -77,29 +78,28 @@ QLabel[cssClass="title2"]{
 }
 
 QComboBox{
-    background-color:#BCB6AE;
+    background-color:#292929;
     color:#ffffff;
 	font-family:Trebuchet MS;
 	font-size:12px;
     font-weight:bold;
-    border-radius:5px;
+    border-radius:2px;
 }
 
 QLineEdit{
-    background-color:#BCB6AE;
+    background-color:#292929;
     color:#ffffff;
 	font-family:Trebuchet MS;
 	font-size:12px;
-    border-radius:8px;
+    border-radius:2px;
 }
 
 QCheckBox{
-    color:#ffffff;
+    color:#262626;
 	font-family:Trebuchet MS;
 	font-size:12px;
 }
 '''
-
 
 class Ui_Form(QtWidgets.QWidget):
 
@@ -141,7 +141,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.gridLayout_7 = QtWidgets.QGridLayout(Form)
         self.gridLayout_7.setObjectName("gridLayout_7")
         self.frame = QtWidgets.QFrame(Form)
-        self.frame.setFrameShape(QtWidgets.QFrame.Panel)
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setLineWidth(2)
         self.frame.setMidLineWidth(0)
@@ -203,7 +203,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.verticalLayout_5.addLayout(self.horizontalLayout)
         self.gridLayout_7.addWidget(self.frame, 0, 0, 1, 1)
         self.frame_3 = QtWidgets.QFrame(Form)
-        self.frame_3.setFrameShape(QtWidgets.QFrame.Panel)
+        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.frame_3.setMidLineWidth(0)
         self.frame_3.setObjectName("frame_3")
@@ -238,7 +238,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.verticalLayout.addLayout(self.horizontalLayout_5)
         self.gridLayout_7.addWidget(self.frame_3, 0, 1, 2, 1)
         self.frame_5 = QtWidgets.QFrame(Form)
-        self.frame_5.setFrameShape(QtWidgets.QFrame.Panel)
+        self.frame_5.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_5.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.frame_5.setMidLineWidth(0)
         self.frame_5.setObjectName("frame_5")
@@ -304,7 +304,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.verticalLayout_4.addLayout(self.horizontalLayout_16)
         self.gridLayout_7.addWidget(self.frame_5, 0, 2, 2, 1)
         self.frame_2 = QtWidgets.QFrame(Form)
-        self.frame_2.setFrameShape(QtWidgets.QFrame.Panel)
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setLineWidth(2)
         self.frame_2.setMidLineWidth(0)
@@ -312,7 +312,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.frame_2)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.title_1_2 = QtWidgets.QLabel(self.frame_2)
-        self.title_1_2.setMaximumSize(QtCore.QSize(100, 34))
+        self.title_1_2.setMaximumSize(QtCore.QSize(60, 34))
         self.title_1_2.setObjectName("title_1_2")
         self.verticalLayout_6.addWidget(self.title_1_2)
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout()
@@ -380,7 +380,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.checkBox.setObjectName("checkBox")
         self.verticalLayout_6.addWidget(self.checkBox, 0, QtCore.Qt.AlignRight)
         self.title_1_3 = QtWidgets.QLabel(self.frame_2)
-        self.title_1_3.setMaximumSize(QtCore.QSize(100, 34))
+        self.title_1_3.setMaximumSize(QtCore.QSize(60, 34))
         self.title_1_3.setObjectName("title_1_3")
         self.verticalLayout_6.addWidget(self.title_1_3)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
@@ -433,7 +433,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.verticalLayout_6.addLayout(self.gridLayout_4)
         self.gridLayout_7.addWidget(self.frame_2, 1, 0, 2, 1)
         self.frame_4 = QtWidgets.QFrame(Form)
-        self.frame_4.setFrameShape(QtWidgets.QFrame.Panel)
+        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.frame_4.setLineWidth(2)
         self.frame_4.setMidLineWidth(0)
@@ -672,11 +672,11 @@ class Ui_Form(QtWidgets.QWidget):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Prometheus"))
-        self.title_1_1.setText(_translate("Form", "Remote Controlled Car"))
+        self.title_1_1.setText(_translate("Form", "Remote Controlled Cars"))
         self.label_2.setText(_translate("Form", "Battery"))
         self.input_1.setText(_translate("Form", "Tracker Color"))
         self.value_1.setText(_translate("Form", "72%"))
-        self.label_8.setText(_translate("Form", "      Mapping Area"))
+        self.label_8.setText(_translate("Form", "         Mapping Area ..."))
         self.label_4.setText(_translate("Form", "Status"))
         self.value_2.setText(_translate("Form", "In Motion"))
         self.pushButton_2.setText(_translate("Form", "Unregister"))
@@ -732,7 +732,7 @@ class Ui_Form(QtWidgets.QWidget):
         self.value_17.setText(_translate("Form", "22"))
         self.label_58.setText(_translate("Form", "   Rooms Explored :"))
         self.value_20.setText(_translate("Form", "4"))
-        self.label_24.setText(_translate("Form", "   Heading Direction :"))
+        self.label_24.setText(_translate("Form", "   Ground Height :"))
         self.value_4.setText(_translate("Form", "1.53m"))
         self.label_39.setText(_translate("Form", "   Occupied Voxels :"))
         self.value_12.setText(_translate("Form", "744"))

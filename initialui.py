@@ -163,3 +163,12 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "HEading DIrection"))
         self.label_9.setText(_translate("MainWindow", "Front DIstance"))
         self.label_10.setText(_translate("MainWindow", "acceleration"))
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_MainWindow()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())

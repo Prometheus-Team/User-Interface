@@ -10,6 +10,10 @@ import socket
 import pickle
 import threading
 import utilities
+import numpy as np
+import time
+import queue
+import cv2
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -87,7 +91,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.conncetionStatus = 0
 		self.manualControlStatus = 0
 		self.searchStatus = 0
-		self.3DStatus = 0
+		self.status3D = 0
 
 	def keyPressEvent(self, event):
 		print("key press event fired")
@@ -681,8 +685,8 @@ class Ui_Form(QtWidgets.QWidget):
 		self.horizontalLayout_5.addWidget(self.BTN_edge)
 		self.img_widget = QtWidgets.QWidget(self.GB_4)
 		self.img_widget.setGeometry(QtCore.QRect(10, 40, 640, 480))
-		self.img_widget.setAutoFillBackground(False)
-		self.img_widget.setStyleSheet("background-color:#000;")
+		# self.img_widget.setAutoFillBackground(False)
+		# self.img_widget.setStyleSheet("background-color:#000;")
 		self.img_widget.setObjectName("img_widget")
 		self.verticalLayout.addWidget(self.GB_4)
 		self.gridLayout.addWidget(self.frame_3, 0, 1, 2, 1)
@@ -705,6 +709,7 @@ class Ui_Form(QtWidgets.QWidget):
 		# # Video formatting Buttons
 		# # raw button
 		# self.BTN_raw.clicked.connect(self.changeFeedToRaw())
+		self.BTN_raw.clicked.connect(self.button)
 		# # depth button
 		# self.BTN_raw.clicked.connect(self.changeFeedToDepth())
 		# # edge button
@@ -713,6 +718,11 @@ class Ui_Form(QtWidgets.QWidget):
 		# 3D Viewing
 		# Explore 3D button(gonna be BTN_explore)
 		# self.BTN_8.clicked.connect(self.explore3D())
+
+		self.window_width = self.img_widget.frameSize().width()
+		self.window_height = self.img_widget.frameSize().height()
+		self.img_widget = OwnImageWidget(self.img_widget)
+		self.q = queue.Queue()
 
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
@@ -852,24 +862,72 @@ class Ui_Form(QtWidgets.QWidget):
 		self.BTN_depth.setText(_translate("Form", "Depth"))
 		self.BTN_edge.setText(_translate("Form", "Edge"))
 
+	def button(self):
+		self.timer = QtCore.QTimer(self)
+		self.timer.timeout.connect(self.update_frame)
+		self.timer.start(1)
+		myThread = threading.Thread(target=self.grab, args=(
+			0, self.q, 1920, 1080, 30), daemon=True)
+		myThread.start()
+
+	def update_frame(self):
+		# print("update frame called")
+		if not self.q.empty():
+			frame = self.q.get()
+			img = frame["img"]
+
+			img_height, img_width, img_colors = img.shape
+			scale_w = float(self.window_width) / float(img_width)
+			scale_h = float(self.window_height) / float(img_height)
+			scale = min([scale_w, scale_h])
+
+			if scale == 0:
+				scale = 1
+
+			img = cv2.resize(img, None, fx=scale, fy=scale, interpolation = cv2.INTER_CUBIC)
+			img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+			height, width, bpc = img.shape
+			bpl = bpc * width
+			image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
+			self.img_widget.setImage(image)
+
+	def grab(self,cam, queue, width, height, fps):
+		print("grab called")
+		capture = cv2.VideoCapture('http://192.168.1.105:4747/video')
+		capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+		capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+		capture.set(cv2.CAP_PROP_FPS, fps)
+
+		while True:
+			print("in grab loop")
+			frame = {}
+			capture.grab()
+			retval, img = capture.retrieve(0)
+			frame["img"] = img
+
+			if queue.qsize() < 10:
+				queue.put(frame)
+			else:
+				print(queue.qsize())
+
 
 	def connect(self):
 		ip = self.INP_ip.text()
 		port = self.INP_port.text()
 		if utilities.validateIP(ip) and utilities.validatePort(port):
-			#try connection
+			# try connection
 			# if connection set self.connectionStatus = 1
 			pass
-			
+
 	def startSearch(self):
-		self.3DStatus = 0
+		self.status3D = 0
 		navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
 		mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
 
 		if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict):
-			#self.manualcontrolstatus = 0
-			#start search
-			#update search status set self.searching = 1
+			# self.manualcontrolstatus = 0
+			# start search
+			# update search status set self.searching = 1
 			pass
 
 	def abortSearch(self):
@@ -883,7 +941,7 @@ class Ui_Form(QtWidgets.QWidget):
 		# 	pass
 
 	def checkSystem(self):
-		#send checksystem command to vehicle
+		# send checksystem command to vehicle
 		# get output message saying check system complete from vehicle and assign it to message
 		message = "Check System was successful"
 		QtWidgets.QMessageBox.information(self, "Check System", message)
@@ -905,9 +963,27 @@ class Ui_Form(QtWidgets.QWidget):
 			self.feedTypeStatus = "edge"
 
 	def explore3D(self):
-		if self.3DStatus == 1:
-			#open the 3D exploring window
+		if self.status3D == 1:
+			# open the 3D exploring window
 			pass
+
+class OwnImageWidget(QtWidgets.QWidget):
+		def __init__(self, parent=None):
+			super(OwnImageWidget, self).__init__(parent)
+			self.image = None
+
+		def setImage(self, image):
+			self.image = image
+			sz = image.size()
+			self.setMinimumSize(sz)
+			self.update()
+
+		def paintEvent(self, event):
+			qp = QtGui.QPainter()
+			qp.begin(self)
+			if self.image:
+				qp.drawImage(QtCore.QPoint(0, 0), self.image)
+			qp.end()
 
 if __name__ == "__main__":
 	import sys

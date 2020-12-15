@@ -32,8 +32,11 @@ class Ui_Form(QtWidgets.QWidget):
 		self.sendCmdSocket = None
 		self.searching = 1
 		self.feedTypeStatus = "raw"
-
 		self.processingDataHolder = []
+		self.processedImagesHolder = []
+
+		self.datasendIP = "192.168.0.134"
+		self.datasendPort = 8090
 
 	def keyPressEvent(self, event):
 		print("key press event fired")
@@ -46,19 +49,19 @@ class Ui_Form(QtWidgets.QWidget):
 			#need change
 			# its left arrow button or its a button
 			print("left arrow pressed or button A was pressed")
-			utilities.sendDataThroughSocket("192.168.1.111",8080,"move","left")
+			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","left")
 		elif key == 16777235 or key == 87:
 			# its up arrow button or its w button
 			print("up arrow pressed or button W was pressed")
-			utilities.sendDataThroughSocket("192.168.1.111",8080,"move","forward")
+			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","forward")
 		elif key == 16777236 or key == 68:
 			# its right arrow button or its d button
 			print("right arrow pressed or button D was pressed")
-			utilities.sendDataThroughSocket("192.168.1.111",8080,"move","right")
+			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","right")
 		elif key == 16777237 or key == 83:
 			# its down arrow button or its s button
 			print("down arrow pressed or button S was pressed")
-			utilities.sendDataThroughSocket("192.168.1.111",8080,"move","backward")
+			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","backward")
 
 	def setupUi(self, Form):
 		Form.setObjectName("Form")
@@ -835,7 +838,7 @@ class Ui_Form(QtWidgets.QWidget):
 			try:
 				# self.infoSocket = threading.Thread(target=utilities.recieveDisplayInformationDataSocket, args=(self,ip, port,self.infoHolderList,), daemon=True)
 				# self.infoSocket.start()
-				self.imageSocket = threading.Thread(target=utilities.imageRecievingClient, args=(self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,), daemon=True)
+				self.imageSocket = threading.Thread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
 				self.imageSocket.start()
 				self.connectionStatus = 1
 				self.value_status.setText("Connected")
@@ -899,9 +902,10 @@ class Ui_Form(QtWidgets.QWidget):
 		
 
 	def manualControl(self):
-		if self.manualControlStatus == 0 and self.connectionStatus == 1:
+		# if self.manualControlStatus == 0 and self.connectionStatus == 1:
+		if True:
 			try:
-				manualControl = threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "manualControlChange", True,), daemon=True)
+				manualControl = threading.Thread(target=utilities.sendDataThroughSocket, args=(self.datasendIP,self.datasendPort, "manualControlChange", True,), daemon=True)
 				manualControl.start()
 				manualControl.join()
 				self.manualControlStatus = 1
@@ -910,28 +914,32 @@ class Ui_Form(QtWidgets.QWidget):
 				print("manual control failure")
 
 	def changeFeedToRaw(self):
+		print("in raw")
+		print(self.feedTypeStatus, "so ")
 		print(self.feedTypeStatus != "raw")
 		if self.feedTypeStatus != "raw":
 			self.feedTypeStatus = "raw"
 			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self.vehicleIP, self.vehiclePort,"raw",self.imageHolderList,), daemon=True)
+			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,"raw",self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
 			self.imageSocket.start()
 
 	def changeFeedToDepth(self):
 		if not self.feedTypeStatus != "depth":
 			self.feedTypeStatus = "depth"
 			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self.vehicleIP, self.vehiclePort,self.feedTypeStatus,self.imageHolderList,), daemon=True)
+			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
 			self.imageSocket.start()
 
 	def changeFeedToEdge(self):
 		print("in edge")
+		print(self.feedTypeStatus, "so ")
+		print(self.feedTypeStatus != "edge")
 		value = self.feedTypeStatus != "edge"
 		if value:
 			print("stop and start")
 			self.feedTypeStatus = "edge"
 			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self.vehicleIP, self.vehiclePort,"edge",self.imageHolderList,), daemon=True)
+			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self,self.vehicleIP,self.vehiclePort,"edge",self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
 			self.imageSocket.start()
 
 	def explore3D(self):

@@ -9,7 +9,7 @@
 import socket
 import pickle
 import threading
-import utilities
+import ui.utilities
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -87,7 +87,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.conncetionStatus = 0
 		self.manualControlStatus = 0
 		self.searchStatus = 0
-		self.3DStatus = 0
+		self.DStatus = 0
 
 	def keyPressEvent(self, event):
 		print("key press event fired")
@@ -687,7 +687,8 @@ class Ui_Form(QtWidgets.QWidget):
 		self.verticalLayout.addWidget(self.GB_4)
 		self.gridLayout.addWidget(self.frame_3, 0, 1, 2, 1)
 
-		self.grabKeyboard()
+		if self.manualControlStatus == 1:
+			self.grabKeyboard()
 
 		# Button Action Assignment
 		# Action and Input side buttons
@@ -862,7 +863,7 @@ class Ui_Form(QtWidgets.QWidget):
 			pass
 			
 	def startSearch(self):
-		self.3DStatus = 0
+		self.DStatus = 0
 		navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
 		mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
 
@@ -905,7 +906,7 @@ class Ui_Form(QtWidgets.QWidget):
 			self.feedTypeStatus = "edge"
 
 	def explore3D(self):
-		if self.3DStatus == 1:
+		if self.DStatus == 1:
 			#open the 3D exploring window
 			pass
 

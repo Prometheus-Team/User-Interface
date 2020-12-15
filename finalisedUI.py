@@ -21,7 +21,7 @@ class Ui_Form(QtWidgets.QWidget):
 
 	def __init__(self):
 		super().__init__()
-		self.conncetionStatus = 0
+		self.connectionStatus = 0
 		self.manualControlStatus = 0
 		self.searchStatus = 0
 		self.status3D = 0
@@ -31,6 +31,9 @@ class Ui_Form(QtWidgets.QWidget):
 		self.infoHolderList = []
 		self.sendCmdSocket = None
 		self.searching = 1
+		self.feedTypeStatus = "raw"
+
+		self.processingDataHolder = []
 
 	def keyPressEvent(self, event):
 		print("key press event fired")
@@ -40,21 +43,22 @@ class Ui_Form(QtWidgets.QWidget):
 		# might need to check connection but we can just send it dont care if we actually know its being recieved
 
 		if key == 16777234 or key == 65:
+			#need change
 			# its left arrow button or its a button
 			print("left arrow pressed or button A was pressed")
-			sendDataThroughSocket(DataVehicleIP, DataVehiclePort, "4")
+			utilities.sendDataThroughSocket("192.168.1.111",8080,"move","left")
 		elif key == 16777235 or key == 87:
 			# its up arrow button or its w button
 			print("up arrow pressed or button W was pressed")
-			sendDataThroughSocket(DataVehicleIP, DataVehiclePort, "8")
+			utilities.sendDataThroughSocket("192.168.1.111",8080,"move","forward")
 		elif key == 16777236 or key == 68:
 			# its right arrow button or its d button
 			print("right arrow pressed or button D was pressed")
-			sendDataThroughSocket(DataVehicleIP, DataVehiclePort, "6")
+			utilities.sendDataThroughSocket("192.168.1.111",8080,"move","right")
 		elif key == 16777237 or key == 83:
 			# its down arrow button or its s button
 			print("down arrow pressed or button S was pressed")
-			sendDataThroughSocket(DataVehicleIP, DataVehiclePort, "2")
+			utilities.sendDataThroughSocket("192.168.1.111",8080,"move","backward")
 
 	def setupUi(self, Form):
 		Form.setObjectName("Form")
@@ -630,39 +634,37 @@ class Ui_Form(QtWidgets.QWidget):
 		self.verticalLayout.addWidget(self.GB_4)
 		self.gridLayout.addWidget(self.frame_3, 0, 1, 2, 1)
 
-		if self.manualControlStatus == 1:
-			self.grabKeyboard()
+		# if self.manualControlStatus == 1:
+		# 	self.grabKeyboard()
 
 		# Button Action Assignment
 		# Action and Input side buttons
 		# connect button
-		# self.BTN_connect.clicked.connect(self.connect)
+		self.BTN_connect.clicked.connect(self.connect)
 		# # start exploration button(gonna be BTN_search)
-		# self.BTN_search_2.clicked.connect(self.startSearch())
-		# # abort exploration button
-		# self.BTN_abort_search.clicked.connect(self.abortSearch())
-		# # check system button
-		self.BTN_check.clicked.connect(self.checkSystem)
-		# # manual control button
-		# self.BTN_MC.connect(self.manualControl())
+		self.BTN_search_2.clicked.connect(self.startSearch)
+		# # # abort exploration button
+		# self.BTN_abort_search.clicked.connect(self.abortSearch)
+		# # # check system button
+		# self.BTN_check.clicked.connect(self.checkSystem)
+		# # # manual control button
+		self.BTN_MC.clicked.connect(self.manualControl)
 		# send packet notifiying the vehicle its going to be changed to manual control
 		# # Video formatting Buttons
 		# # raw button
-		# self.BTN_raw.clicked.connect(self.changeFeedToRaw())
-		self.BTN_raw.clicked.connect(self.button)
+		self.BTN_raw.clicked.connect(self.changeFeedToRaw)
 		# # depth button
-		# self.BTN_raw.clicked.connect(self.changeFeedToDepth())
+		self.BTN_depth.clicked.connect(self.changeFeedToDepth)
 		# # edge button
-		# self.BTN_raw.clicked.connect(self.changeFeedToEdge())
+		self.BTN_edge.clicked.connect(self.changeFeedToEdge)
 
 		# 3D Viewing
 		# Explore 3D button(gonna be BTN_explore)
-		# self.BTN_8.clicked.connect(self.explore3D())
+		self.BTN_8.clicked.connect(self.explore3D)
 
 		self.window_width = self.img_widget.frameSize().width()
 		self.window_height = self.img_widget.frameSize().height()
 		self.img_widget = OwnImageWidget(self.img_widget)
-		self.q = queue.Queue()
 
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
@@ -801,21 +803,12 @@ class Ui_Form(QtWidgets.QWidget):
 		self.BTN_raw.setText(_translate("Form", "Raw"))
 		self.BTN_depth.setText(_translate("Form", "Depth"))
 		self.BTN_edge.setText(_translate("Form", "Edge"))
-
-	def button(self):
-		self.timer = QtCore.QTimer(self)
-		self.timer.timeout.connect(self.update_frame)
-		self.timer.start(1)
-		myThread = threading.Thread(target=self.grab, args=(
-			0, self.q, 1920, 1080, 30), daemon=True)
-		myThread.start()
-
+	
 	def update_frame(self):
 		# print("update frame called")
-		if not self.q.empty():
-			frame = self.q.get()
-			img = frame["img"]
-
+		if len(self.imageHolderList) > 0:
+			img = self.imageHolderList[len(self.imageHolderList)-1]
+			
 			img_height, img_width, img_colors = img.shape
 			scale_w = float(self.window_width) / float(img_width)
 			scale_h = float(self.window_height) / float(img_height)
@@ -831,37 +824,20 @@ class Ui_Form(QtWidgets.QWidget):
 			image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
 			self.img_widget.setImage(image)
 
-	def grab(self,cam, queue, width, height, fps):
-		print("grab called")
-		capture = cv2.VideoCapture('http://192.168.43.45:4747/video')
-		capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-		capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-		capture.set(cv2.CAP_PROP_FPS, fps)
-
-		while True:
-			print("in grab loop")
-			frame = {}
-			capture.grab()
-			retval, img = capture.retrieve(0)
-			frame["img"] = img
-
-			if queue.qsize() < 10:
-				queue.put(frame)
-			else:
-				print(queue.qsize())
-
-
 	def connect(self):
-		ip = self.INP_ip.text()
-		port = self.INP_port.text()
-		if utilities.validateIP(ip) and utilities.validatePort(port):
+		self.vehicleIP = self.INP_ip.text()
+		self.vehiclePort = self.INP_port.text()
+		if utilities.validateIP(self.vehicleIP) and utilities.validatePort(self.vehiclePort):
+			self.timer = QtCore.QTimer(self)
+			self.timer.timeout.connect(self.update_frame)
+			self.timer.start(1)
 			# try connection
 			try:
-				self.infoSocket = threading.Thread(target=utilities.imageRecievingClient, args=(self,ip, port,self.infoHolderList,), daemon=True)
-				self.infoSocket.start()
-				self.imageSocket = threading.Thread(target=utilities.recieveDisplayInformationDataSocket, args=(ip,port, self.imageHolderList,), daemon=True)
+				# self.infoSocket = threading.Thread(target=utilities.recieveDisplayInformationDataSocket, args=(self,ip, port,self.infoHolderList,), daemon=True)
+				# self.infoSocket.start()
+				self.imageSocket = threading.Thread(target=utilities.imageRecievingClient, args=(self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,), daemon=True)
 				self.imageSocket.start()
-				self.conncetionStatus = 1
+				self.connectionStatus = 1
 				self.value_status.setText("Connected")
 				self.value_status.setStyle.setStyleSheet("color:rgb(0,220,0);")
 			# if connection set self.connectionStatus = 1
@@ -871,56 +847,92 @@ class Ui_Form(QtWidgets.QWidget):
 
 	def startSearch(self):
 		self.status3D = 0
-		navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
-		mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
+		self.releaseKeyboard()
+		# navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
+		# mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
 
-		if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.conncetionStatus == 1:
-			# self.manualcontrolstatus = 0
-			self.manualControlStatus = 0
-			#SAMI
-			# start search
-			# update search status set self.searching = 1
-			self.searching = 1
-			pass
+		# if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.connectionStatus == 1:
+		# 	# self.manualcontrolstatus = 0
+		# 	try:
+		# 		distanceData = {'up': self.INP_front_length.text(), 'down':self.INP_back_length.text(), 'left':self.INP_left_length.text(), 'right':self.INP_right_length.text()}
+		# 		threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "startExplore", distanceData,), daemon=True).start()
+		# 		self.manualControlStatus = 0
+		# 		self.searching = 1
+		# 	except:
+		# 		print("abort problem happened")
+		# 	#SAMI
+		# 	# start search
+		# 	# update search status set self.searching = 1
+		# 	pass
 
-	def abortSearch(self):
-		if self.searchStatus == 1:
-		# 	#send abort command to drone
-			try:
-				threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "abort search", "",), daemon=True).start()
-			except:
-				print("abort problem happened")
-		# 	# assign self.searchstatus when drone approval comes
-			self.searchStatus = 0
+	# def abortSearch(self):
+		# if self.searchStatus == 1:
+		# # 	#send abort command to drone
+		# 	try:
+		# 		threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "abortExplore", "",), daemon=True).start()
+		# 	except:
+		# 		print("abort problem happened")
+		# # 	# assign self.searchstatus when drone approval comes
+		# 	self.searchStatus = 0
 
-	def checkSystem(self):
-		if self.searchStatus != 1 and self.conncetionStatus == 1:
-		# send checksystem command to vehicle
-			try:
-				# configure to wait for approval
-				threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "abort search", "",), daemon=True).start()
-			except:
-				print("check system problem happened")
+	# def checkSystem(self):
+	# 	# if self.searchStatus != 1 and self.connectionStatus == 1:
+	# 	if True:
+	# 	# send checksystem command to vehicle
+	# 		try:
+	# 			# configure to wait for approval
+	# 			returnValue = -1
+	# 			checkSystemThread = threading.Thread(target=utilities.sendDataThroughSocketCheckSystem, args=('192.168.1.111', '8000', "checkSystem", "",returnValue), daemon=True)
+	# 			checkSystemThread.start()
+	# 			checkSystemThread.join()
+	# 			if returnValue == 1:
+	# 				QtWidgets.QMessageBox.information(self, "Check System", "Check System Successful")
+	# 			elif returnVal == 0:
+	# 				print(returnValue)
+	# 				QtWidgets.QMessageBox.information(self, "Check System", "Check System Failed")
+
+	# 		except:
+	# 			print("check system problem happened")
 		
-		# get output message saying check system complete from vehicle and assign it to message
-		message = "Check System was successful"
-		QtWidgets.QMessageBox.information(self, "Check System", message)
+		# # get output message saying check system complete from vehicle and assign it to message
+		# message = "Check System was successful"
+		
 
 	def manualControl(self):
-		if self.manualControlStatus == 0:
-			self.manualControlStatus = 1
+		if self.manualControlStatus == 0 and self.connectionStatus == 1:
+			try:
+				manualControl = threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "manualControlChange", True,), daemon=True)
+				manualControl.start()
+				manualControl.join()
+				self.manualControlStatus = 1
+				self.grabKeyboard()
+			except:
+				print("manual control failure")
 
 	def changeFeedToRaw(self):
+		print(self.feedTypeStatus != "raw")
 		if self.feedTypeStatus != "raw":
 			self.feedTypeStatus = "raw"
+			self.imageSocket.stop()
+			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self.vehicleIP, self.vehiclePort,"raw",self.imageHolderList,), daemon=True)
+			self.imageSocket.start()
 
 	def changeFeedToDepth(self):
-		if self.feedTypeStatus != "depth":
+		if not self.feedTypeStatus != "depth":
 			self.feedTypeStatus = "depth"
+			self.imageSocket.stop()
+			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self.vehicleIP, self.vehiclePort,self.feedTypeStatus,self.imageHolderList,), daemon=True)
+			self.imageSocket.start()
 
 	def changeFeedToEdge(self):
-		if self.feedTypeStatus != "edge":
+		print("in edge")
+		value = self.feedTypeStatus != "edge"
+		if value:
+			print("stop and start")
 			self.feedTypeStatus = "edge"
+			self.imageSocket.stop()
+			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self.vehicleIP, self.vehiclePort,"edge",self.imageHolderList,), daemon=True)
+			self.imageSocket.start()
 
 	def explore3D(self):
 		if self.status3D == 1:
@@ -954,8 +966,8 @@ if __name__ == "__main__":
 	ui.setupUi(Form)
 	Form.show()
 	# Threading added for the a socket server to recieve the information from the vehicle
-	DataUiThread = threading.Thread(
-		target=recieveDisplayInformationDataSocket, args=(DataUiIP, DataUiPort,), daemon=True)
+	# DataUiThread = threading.Thread(
+	# 	target=recieveDisplayInformationDataSocket, args=(DataUiIP, DataUiPort,), daemon=True)
 	# DataUiThread.start()
 	# end
 	sys.exit(app.exec_())

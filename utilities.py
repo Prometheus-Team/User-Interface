@@ -147,13 +147,13 @@ def imageRecievingClient(ip, port,feedStatus,dataholder, processingDataHolder):
             dataholder.append(frame)
         
         
-        if len(dataholder) > 20:
-            dataholder = dataholder[10:]
+        # if len(dataholder) > 20:
+        #     dataholder = dataholder[10:]
 
-        if len(processingDataHolder) > 10:
-            dataForReducer = processingDataHolder[:10]
-            processingDataHolder = processingDataHolder[10:]
-            reduceThread = threading.Thread(target=newimplemenationofreducedclass, args=(dataForReducer,5,returningImageHolder), daemon=True)
+        # if len(processingDataHolder) > 10:
+        #     dataForReducer = processingDataHolder[:10]
+        #     processingDataHolder = processingDataHolder[10:]
+        #     reduceThread = threading.Thread(target=newimplemenationofreducedclass, args=(dataForReducer,5,returningImageHolder), daemon=True)
             #frameReducerCall
             # import frameReducer
 

@@ -9,9 +9,10 @@
 import socket
 import pickle
 import threading
-import ui.utilities
+import ui.utilities as utilities
 import numpy as np
 import time
+import queue
 import cv2
 
 from PyQt5 import QtCore, QtGui, QtWidgets

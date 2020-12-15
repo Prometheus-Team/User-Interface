@@ -24,6 +24,7 @@ from client_data import *
 import numpy as np
 import time
 import cv2
+import concurrent.futures
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -963,8 +964,8 @@ class Ui_Form(QtWidgets.QWidget):
 			self.timer.start(1)
 			# try connection
 			try:
-				# self.infoSocket = threading.Thread(target=utilities.recieveDisplayInformationDataSocket, args=(self,ip, port,self.infoHolderList,), daemon=True)
-				# self.infoSocket.start()
+				self.infoSocket = threading.Thread(target=utilities.recieveDisplayInformationDataSocket, args=(self,ip, port,self.infoHolderList,), daemon=True)
+				self.infoSocket.start()
 				self.imageSocket = threading.Thread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
 				self.imageSocket.start()
 				self.connectionStatus = 1
@@ -978,65 +979,79 @@ class Ui_Form(QtWidgets.QWidget):
 	def startSearch(self):
 		self.status3D = 0
 		self.releaseKeyboard()
-		# navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
-		# mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
+		navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
+		mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
 
-		# if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.connectionStatus == 1:
-		# 	# self.manualcontrolstatus = 0
-		# 	try:
-		# 		distanceData = {'up': self.INP_front_length.text(), 'down':self.INP_back_length.text(), 'left':self.INP_left_length.text(), 'right':self.INP_right_length.text()}
-		# 		threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "startExplore", distanceData,), daemon=True).start()
-		# 		self.manualControlStatus = 0
-		# 		self.searching = 1
-		# 	except:
-		# 		print("abort problem happened")
-		# 	#SAMI
-		# 	# start search
-		# 	# update search status set self.searching = 1
-		# 	pass
+		if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.connectionStatus == 1:
+			# self.manualcontrolstatus = 0
+			try:
+				distanceData = {'up': self.INP_front_length.text(), 'down':self.INP_back_length.text(), 'left':self.INP_left_length.text(), 'right':self.INP_right_length.text()}
+				with concurrent.futures.ThreadPoolExecutor() as executor:
+					future = executor.submit(utilities.sendDataThroughSocket, (datasendIP, datasendPort, "startExplore"))
+					status = future.result()
+					if status == 1:
+						self.manualControlStatus = 0
+						self.searching = 1
+					else:
+						raise EnvironmentError
+			except:
+				print("abort problem happened")
+			#SAMI
+			# start search
+			# update search status set self.searching = 1
+			# pass
 
-	# def abortSearch(self):
-		# if self.searchStatus == 1:
-		# # 	#send abort command to drone
-		# 	try:
-		# 		threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "abortExplore", "",), daemon=True).start()
-		# 	except:
-		# 		print("abort problem happened")
-		# # 	# assign self.searchstatus when drone approval comes
-		# 	self.searchStatus = 0
+	def abortSearch(self):
+		if self.searchStatus == 1:
+		# 	#send abort command to drone
+			try:
+				with concurrent.futures.ThreadPoolExecutor() as executor:
+					future = executor.submit(utilities.sendDataThroughSocket, (datasendIP, datasendPort, "abortExplore", ""))
+					status = future.result()
+					if status == 1:
+						self.searching = 0
+						self.searchStatus = 0
+					else:
+						raise EnvironmentError
+			except:
+				print("abort problem happened")
+		# 	# assign self.searchstatus when drone approval comes
 
-	# def checkSystem(self):
-	# 	# if self.searchStatus != 1 and self.connectionStatus == 1:
-	# 	if True:
-	# 	# send checksystem command to vehicle
-	# 		try:
-	# 			# configure to wait for approval
-	# 			returnValue = -1
-	# 			checkSystemThread = threading.Thread(target=utilities.sendDataThroughSocketCheckSystem, args=('192.168.1.111', '8000', "checkSystem", "",returnValue), daemon=True)
-	# 			checkSystemThread.start()
-	# 			checkSystemThread.join()
-	# 			if returnValue == 1:
-	# 				QtWidgets.QMessageBox.information(self, "Check System", "Check System Successful")
-	# 			elif returnVal == 0:
-	# 				print(returnValue)
-	# 				QtWidgets.QMessageBox.information(self, "Check System", "Check System Failed")
-
-	# 		except:
-	# 			print("check system problem happened")
-		
-		# # get output message saying check system complete from vehicle and assign it to message
-		# message = "Check System was successful"
+	def checkSystem(self):
+		if self.searchStatus != 1 and self.connectionStatus == 1:
+			self.checkSystem = 1
+		# send checksystem command to vehicle
+			try:
+				# configure to wait for approval
+				with concurrent.futures.ThreadPoolExecutor() as executor:
+					future = executor.submit(utilities.sendDataThroughSocketCheckSystem, ('192.168.1.111', '8000', "checkSystem", ""))
+					status = future.result()
+					if status == 1:
+						QtWidgets.QMessageBox.information(self, "Check System", "Check System Successful")
+					else:
+						QtWidgets.QMessageBox.information(self, "Check System", "Check System Failed")
+						raise EnvironmentError
+			except:
+				self.checkSystem = 0
+				print("check system problem happened")
+		self.checkSystem = 0
+		# get output message saying check system complete from vehicle and assign it to message
+		message = "Check System was successful"
 		
 
 	def manualControl(self):
-		# if self.manualControlStatus == 0 and self.connectionStatus == 1:
-		if True:
+		if self.manualControlStatus == 0 and self.connectionStatus == 1:
 			try:
-				manualControl = threading.Thread(target=utilities.sendDataThroughSocket, args=(self.datasendIP,self.datasendPort, "manualControlChange", True,), daemon=True)
-				manualControl.start()
-				manualControl.join()
-				self.manualControlStatus = 1
-				self.grabKeyboard()
+				with concurrent.futures.ThreadPoolExecutor() as executor:
+					future = executor.submit(utilities.sendDataThroughSocket,(self.datasendIP,self.datasendPort, "manualControlChange", True))
+					status = future.result()
+					if status == 1:
+						self.manualControlStatus = 1
+						self.grabKeyboard()
+						QtWidgets.QMessageBox.information(self, "Manual Control", "Manual Control Successful")
+					else:
+						QtWidgets.QMessageBox.information(self, "Manual Control", "Manual Control Failed")
+						raise EnvironmentError
 			except:
 				print("manual control failure")
 
@@ -1060,7 +1075,10 @@ class Ui_Form(QtWidgets.QWidget):
 			pass
 
 	def export(self):
-		pass
+		saveFile.setShortcut("Ctrl+S")
+        saveFile.setStatusTip('Save File')
+        saveFile.triggered.connect(self.file_save)
+		
 
 class OwnImageWidget(QtWidgets.QWidget):
 		def __init__(self, parent=None):

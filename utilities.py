@@ -4,6 +4,7 @@ import pickle
 import cv2
 import socket
 
+from client_data import *
 
 def validateIP(IP):
     if IP.count(".") == 3 and all(isIPv4(i) for i in IP.split(".")):
@@ -71,19 +72,6 @@ def validateSlantInput(value):
 
 import threading
 
-class StoppableThread(threading.Thread):
-    """Thread class with a stop() method. The thread itself has to check
-    regularly for the stopped() condition."""
-
-    def __init__(self,  *args, **kwargs):
-        super(StoppableThread, self).__init__(*args, **kwargs)
-        self._stop_event = threading.Event()
-
-    def stop(self):
-        self._stop_event.set()
-
-    def stopped(self):
-        return self._stop_event.is_set()
 
 def identify(dxnNum):
     if dxnNum == 8:
@@ -106,7 +94,7 @@ def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHold
     payload_size = struct.calcsize("Q")
 
     # while True:
-    while not self.stopped():
+    while True:
         while len(data) < payload_size:
             packet = client_socket.recv(4 * 1024)
             if not packet: break
@@ -127,7 +115,7 @@ def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHold
         dataRepresentation = {'frame':frame,'x':myData[0],'y':myData[1],'heading':identify(myData[2])} 
         processingDataHolder.append(dataRepresentation)
         # cv2.imshow("Received", frame)
-        if feedStatus == "edge":
+        if ClientData.uiInformation.viewType == 1:
             print("in edge in util")
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             #threshold1 = high intensity gradient
@@ -136,7 +124,7 @@ def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHold
             #L2gradient = equation, False
             edges = cv2.Canny(frame, threshold1=30, threshold2=100)
             dataholder.append(edges)
-        elif feedStatus == "raw":
+        elif ClientData.uiInformation.viewType == 0:
             dataholder.append(frame)
         
         
@@ -244,6 +232,7 @@ def sendDataThroughSocket(IP, Port, cmd,args):
         s.connect((IP, Port))
         data_string = pickle.dumps({'command':cmd,'args':args}, protocol=2)
         s.send(data_string)
+        s.recv(1024)
 
 def sendDataThroughSocketCheckSystem(IP, Port, cmd,args, returnVal):
     Port = int(Port)

@@ -1,3 +1,14 @@
+if __name__ == '__main__':
+
+	import os
+	import sys
+
+	mainDirectory = os.getcwd()
+
+	sys.path.append(mainDirectory + '\\..')
+
+	os.chdir(mainDirectory + '\\..')
+
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'revisedVersion.ui'
@@ -14,6 +25,7 @@ import numpy as np
 import time
 import queue
 import cv2
+from client_data import *
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -956,22 +968,22 @@ class Ui_Form(QtWidgets.QWidget):
 	def startSearch(self):
 		self.status3D = 0
 		self.releaseKeyboard()
-		# navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
-		# mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
+		navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
+		mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
 
-		# if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.connectionStatus == 1:
-		# 	# self.manualcontrolstatus = 0
-		# 	try:
-		# 		distanceData = {'up': self.INP_front_length.text(), 'down':self.INP_back_length.text(), 'left':self.INP_left_length.text(), 'right':self.INP_right_length.text()}
-		# 		threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "startExplore", distanceData,), daemon=True).start()
-		# 		self.manualControlStatus = 0
-		# 		self.searching = 1
-		# 	except:
-		# 		print("abort problem happened")
-		# 	#SAMI
-		# 	# start search
-		# 	# update search status set self.searching = 1
-		# 	pass
+		if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.connectionStatus == 1:
+			# self.manualcontrolstatus = 0
+			try:
+				distanceData = {'up': self.INP_front_length.text(), 'down':self.INP_back_length.text(), 'left':self.INP_left_length.text(), 'right':self.INP_right_length.text()}
+				threading.Thread(target=utilities.sendDataThroughSocket, args=(datasendIP, datasendPort, "startExplore", distanceData,), daemon=True).start()
+				self.manualControlStatus = 0
+				self.searching = 1
+			except:
+				print("abort problem happened")
+			#SAMI
+			# start search
+			# update search status set self.searching = 1
+			pass
 
 	# def abortSearch(self):
 		# if self.searchStatus == 1:
@@ -1019,33 +1031,17 @@ class Ui_Form(QtWidgets.QWidget):
 				print("manual control failure")
 
 	def changeFeedToRaw(self):
-		print("in raw")
-		print(self.feedTypeStatus, "so ")
-		print(self.feedTypeStatus != "raw")
-		if self.feedTypeStatus != "raw":
-			self.feedTypeStatus = "raw"
-			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,"raw",self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
-			self.imageSocket.start()
+		if ClientData.uiInformation.viewType != 0:
+			ClientData.uiInformation.viewType = 0
+
 
 	def changeFeedToDepth(self):
-		if not self.feedTypeStatus != "depth":
-			self.feedTypeStatus = "depth"
-			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
-			self.imageSocket.start()
+		if ClientData.uiInformation.viewType != 2:
+			ClientData.uiInformation.viewType = 2
 
 	def changeFeedToEdge(self):
-		print("in edge")
-		print(self.feedTypeStatus, "so ")
-		print(self.feedTypeStatus != "edge")
-		value = self.feedTypeStatus != "edge"
-		if value:
-			print("stop and start")
-			self.feedTypeStatus = "edge"
-			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self,self.vehicleIP,self.vehiclePort,"edge",self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
-			self.imageSocket.start()
+		if ClientData.uiInformation.viewType != 1:
+			ClientData.uiInformation.viewType = 1
 
 	def explore3D(self):
 		if self.status3D == 1:

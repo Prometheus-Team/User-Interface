@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
+if __name__ == '__main__':
 
+	import os
+	import sys
+
+	mainDirectory = os.getcwd()
+
+	sys.path.append(mainDirectory + '\\..')
+
+	os.chdir(mainDirectory + '\\..')
 # Form implementation generated from reading ui file 'revisedVersion.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
@@ -9,13 +18,18 @@
 import socket
 import pickle
 import threading
-import utilities
+import ui.utilities
 import numpy as np
 import time
-import queue
 import cv2
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton
+from PyQt5.QtGui import QPixmap, QImage
+import numpy as np
+import sys
+from time import sleep
 
 class Ui_Form(QtWidgets.QWidget):
 
@@ -383,10 +397,16 @@ class Ui_Form(QtWidgets.QWidget):
 		self.GB_6.setStyleSheet("color:#e91;")
 		self.GB_6.setAlignment(QtCore.Qt.AlignCenter)
 		self.GB_6.setObjectName("GB_6")
-		self.path_widget = QtWidgets.QWidget(self.GB_6)
-		self.path_widget.setGeometry(QtCore.QRect(10, 30, 411, 541))
-		self.path_widget.setAutoFillBackground(False)
-		self.path_widget.setStyleSheet("background-color:#000;")
+		
+		self.path_widget=MapView()
+		grid = QVBoxLayout()
+		grid.addWidget(self.path_widget)
+		self.GB_6.setLayout(grid)
+
+		#self.path_widget = QtWidgets.QWidget(self.GB_6)
+		#self.path_widget.setGeometry(QtCore.QRect(10, 30, 411, 541))
+		#self.path_widget.setAutoFillBackground(False)
+		#self.path_widget.setStyleSheet("background-color:#000;")
 		self.path_widget.setObjectName("path_widget")
 		self.verticalLayout_4.addWidget(self.GB_6)
 		self.gridLayout.addWidget(self.frame_5, 0, 2, 2, 1)
@@ -965,6 +985,51 @@ class OwnImageWidget(QtWidgets.QWidget):
 			if self.image:
 				qp.drawImage(QtCore.QPoint(0, 0), self.image)
 			qp.end()
+
+
+class UpdateView(QtCore.QThread):
+
+	updated = QtCore.pyqtSignal(object)
+
+	def __init__(self, parent=None):
+		super(UpdateView, self).__init__(parent)
+		self.img= np.zeros((500, 500), dtype=np.uint8)
+	def run(self):
+		while True:
+			print(self.img[250][255])
+			if self.img[250][255]==255:
+				self.img = np.zeros((500, 500), dtype=np.uint8)
+				sleep(1)
+			else:
+				self.img[250:499, 0:499] = 255
+				self.img[150:160,150:160]=150
+				sleep(1)
+			self.updated.emit(self.img)
+
+
+class MapView(QWidget):
+	def __init__(self):
+		super(MapView, self).__init__()
+		self.label = QLabel()
+		
+		self.updateView=UpdateView()
+		img = np.zeros((500, 500), dtype=np.uint8)
+		qImg = QPixmap(QImage(img.data, img.shape[0], img.shape[1], QImage.Format_Grayscale8))
+		self.label.setPixmap(qImg)
+		self.label.update()
+		layout = QVBoxLayout()
+		layout.addWidget(self.label)
+		self.setLayout(layout)
+		self.loadStuff()
+	def loadStuff(self):
+		self.updateView.updated.connect(self.on_data_ready)
+		self.updateView.start()
+	def on_data_ready(self, data):
+		#print(data)
+		qImg = QPixmap(QImage(data.data, data.shape[0], data.shape[1], QImage.Format_Grayscale8))
+		self.label.setPixmap(qImg)
+		self.label.update()
+
 
 if __name__ == "__main__":
 	import sys

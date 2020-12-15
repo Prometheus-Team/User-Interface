@@ -32,6 +32,10 @@ import numpy as np
 import sys
 from time import sleep
 
+
+
+from client_data import *
+
 class Ui_Form(QtWidgets.QWidget):
 
 	def __init__(self):
@@ -934,8 +938,11 @@ class Ui_Form(QtWidgets.QWidget):
 		# print("update frame called")
 		if len(self.imageHolderList) > 0:
 			img = self.imageHolderList[len(self.imageHolderList)-1]
-			
-			img_height, img_width, img_colors = img.shape
+
+			if(len(img.shape) == 2):
+				img_height, img_width = img.shape
+			else:
+				img_height, img_width, img_colors = img.shape
 			scale_w = float(self.window_width) / float(img_width)
 			scale_h = float(self.window_height) / float(img_height)
 			scale = min([scale_w, scale_h])
@@ -1037,33 +1044,17 @@ class Ui_Form(QtWidgets.QWidget):
 				print("manual control failure")
 
 	def changeFeedToRaw(self):
-		print("in raw")
-		print(self.feedTypeStatus, "so ")
-		print(self.feedTypeStatus != "raw")
-		if self.feedTypeStatus != "raw":
-			self.feedTypeStatus = "raw"
-			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,"raw",self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
-			self.imageSocket.start()
+		if ClientData.uiInformation.viewType != 0:
+			ClientData.uiInformation.viewType = 0
+
 
 	def changeFeedToDepth(self):
-		if not self.feedTypeStatus != "depth":
-			self.feedTypeStatus = "depth"
-			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
-			self.imageSocket.start()
+		if ClientData.uiInformation.viewType != 2:
+			ClientData.uiInformation.viewType = 2
 
 	def changeFeedToEdge(self):
-		print("in edge")
-		print(self.feedTypeStatus, "so ")
-		print(self.feedTypeStatus != "edge")
-		value = self.feedTypeStatus != "edge"
-		if value:
-			print("stop and start")
-			self.feedTypeStatus = "edge"
-			self.imageSocket.stop()
-			self.imageSocket = utilities.StoppableThread(target=utilities.imageRecievingClient, args=(self,self.vehicleIP,self.vehiclePort,"edge",self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
-			self.imageSocket.start()
+		if ClientData.uiInformation.viewType != 1:
+			ClientData.uiInformation.viewType = 1
 
 	def explore3D(self):
 		ClientData.triggers.showModelTrigger = True

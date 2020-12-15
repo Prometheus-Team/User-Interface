@@ -929,7 +929,10 @@ class Ui_Form(QtWidgets.QWidget):
 		if len(self.imageHolderList) > 0:
 			img = self.imageHolderList[len(self.imageHolderList)-1]
 
-			img_height, img_width, img_colors = img.shape
+			if(len(img.shape) == 2):
+				img_height, img_width = img.shape
+			else:
+				img_height, img_width, img_colors = img.shape
 			scale_w = float(self.window_width) / float(img_width)
 			scale_h = float(self.window_height) / float(img_height)
 			scale = min([scale_w, scale_h])

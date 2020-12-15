@@ -80,72 +80,80 @@ class Ui_Form(QtWidgets.QWidget):
 	def setupUi(self, Form):
 		Form.setObjectName("Form")
 		Form.setWindowModality(QtCore.Qt.ApplicationModal)
-		Form.resize(1616, 940)
-		Form.setMinimumSize(QtCore.QSize(1616, 940))
-		Form.setMaximumSize(QtCore.QSize(1616, 940))
+		Form.resize(1704, 940)
+		Form.setMinimumSize(QtCore.QSize(1704, 940))
+		Form.setMaximumSize(QtCore.QSize(1704, 940))
 		Form.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
 		Form.setAutoFillBackground(False)
 		Form.setStyleSheet("#Form{\n"
-						   "    background-color:#333;\n"
-						   "}\n"
-						   "\n"
-						   "QPushButton{\n"
-						   "    background:linear-gradient(to bottom, #c62d1f 5%, #f24437 100%);\n"
-						   "    background-color:#333;\n"
-						   "    border-radius:2px;\n"
-						   "    color:#eee;\n"
-						   "    font-family:Trebuchet MS;\n"
-						   "    font-size:12px;\n"
-						   "    text-decoration:none;\n"
-						   "}\n"
-						   "\n"
-						   "QFrame{ \n"
-						   "    background-color: #444;\n"
-						   "    border-radius:2px;\n"
-						   "}\n"
-						   "\n"
-						   "QLabel{\n"
-						   "    color:#bbb;\n"
-						   "    font-family:Trebuchet MS;\n"
-						   "    font-size:12px;\n"
-						   "}\n"
-						   "\n"
-						   "QLabel[cssClass=\"values\"]{\n"
-						   "    font-weight:light;\n"
-						   "    color:#FDC029;\n"
-						   "}\n"
-						   "\n"
-						   "QLabel[cssClass=\"titles\"]{\n"
-						   "    color:#e91;\n"
-						   "    font-size:15px;\n"
-						   "}\n"
-						   "\n"
-						   "QLabel[cssClass=\"title2\"]{\n"
-						   "    color:#AA3D01;\n"
-						   "}\n"
-						   "\n"
-						   "QComboBox{\n"
-						   "    background-color:#292929;\n"
-						   "    color:#ffffff;\n"
-						   "    font-family:Trebuchet MS;\n"
-						   "    font-size:12px;\n"
-						   "    font-weight:bold;\n"
-						   "    border-radius:2px;\n"
-						   "}\n"
-						   "\n"
-						   "QLineEdit{\n"
-						   "    background-color:#292929;\n"
-						   "    color:#ffffff;\n"
-						   "    font-family:Trebuchet MS;\n"
-						   "    font-size:12px;\n"
-						   "    border-radius:2px;\n"
-						   "}\n"
-						   "\n"
-						   "QCheckBox{\n"
-						   "    color:#262626;\n"
-						   "    font-family:Trebuchet MS;\n"
-						   "    font-size:12px;\n"
-						   "}")
+"    background-color:#333;\n"
+"}\n"
+"\n"
+"QPushButton{\n"
+"    background:linear-gradient(to bottom, #c62d1f 5%, #f24437 100%);\n"
+"    background-color:#333;\n"
+"    border-radius:2px;\n"
+"    color:#eee;\n"
+"    font-family:Trebuchet MS;\n"
+"    font-size:12px;\n"
+"    text-decoration:none;\n"
+"\n"
+"}\n"
+"\n"
+"QFrame{ \n"
+"    background-color: #444;\n"
+"    border-radius:2px;\n"
+"}\n"
+"\n"
+"QLabel{\n"
+"    color:#bbb;\n"
+"    font-family:Trebuchet MS;\n"
+"    font-size:12px;\n"
+"}\n"
+"\n"
+"QLabel[cssClass=\"values\"]{\n"
+"    font-weight:light;\n"
+"    color:#FDC029;\n"
+"}\n"
+"\n"
+"QLabel[cssClass=\"titles\"]{\n"
+"    color:#e91;\n"
+"    font-size:15px;\n"
+"}\n"
+"\n"
+"QLabel[cssClass=\"title2\"]{\n"
+"    color:#AA3D01;\n"
+"}\n"
+"\n"
+"QComboBox{\n"
+"    background-color:#292929;\n"
+"    color:#ffffff;\n"
+"    font-family:Trebuchet MS;\n"
+"    font-size:12px;\n"
+"    font-weight:bold;\n"
+"    border-radius:2px;\n"
+"}\n"
+"\n"
+"QLineEdit{\n"
+"    background-color:#292929;\n"
+"    color:#ffffff;\n"
+"    font-family:Trebuchet MS;\n"
+"    font-size:12px;\n"
+"    border-radius:2px;\n"
+"}\n"
+"\n"
+"QCheckBox{\n"
+"    color:#262626;\n"
+"    font-family:Trebuchet MS;\n"
+"    font-size:12px;\n"
+"}\n"
+"\n"
+"QPushButton:disabled{ background-color: yellow; }\n"
+"QPushButton:pressed{ background-color: orange; }\n"
+"QPushButton:focus:pressed{ background-color: black; }\n"
+"QPushButton:focus{ background-color: rgb(0,220,0); }\n"
+"QPushButton:hover{ background-color: rgb(220,0,0); }\n"
+"QPushButton:checked{ background-color: pink; }")
 		self.gridLayout = QtWidgets.QGridLayout(Form)
 		self.gridLayout.setObjectName("gridLayout")
 		self.frame_4 = QtWidgets.QFrame(Form)
@@ -156,14 +164,6 @@ class Ui_Form(QtWidgets.QWidget):
 		self.frame_4.setLineWidth(2)
 		self.frame_4.setMidLineWidth(0)
 		self.frame_4.setObjectName("frame_4")
-		self.BTN_8 = QtWidgets.QPushButton(self.frame_4)
-		self.BTN_8.setGeometry(QtCore.QRect(930, 80, 130, 130))
-		self.BTN_8.setMaximumSize(QtCore.QSize(130, 130))
-		self.BTN_8.setStyleSheet("border-radius:65px;\n"
-								 "color:rgb(0,200,0);\n"
-								 "font-family:Trebuchet MS;\n"
-								 "font-size:14px; ")
-		self.BTN_8.setObjectName("BTN_8")
 		self.GB_5 = QtWidgets.QGroupBox(self.frame_4)
 		self.GB_5.setGeometry(QtCore.QRect(9, 10, 841, 261))
 		font = QtGui.QFont()
@@ -181,7 +181,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.value_avg_speed = QtWidgets.QLabel(self.GB_5)
 		self.value_avg_speed.setGeometry(QtCore.QRect(170, 120, 111, 16))
 		self.value_avg_speed.setStyleSheet("font-weight:light;\n"
-										   "color:#FDC029;")
+"color:#FDC029;")
 		self.value_avg_speed.setObjectName("value_avg_speed")
 		self.LBL_31 = QtWidgets.QLabel(self.GB_5)
 		self.LBL_31.setGeometry(QtCore.QRect(620, 180, 91, 16))
@@ -194,7 +194,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.value_ultrasonic = QtWidgets.QLabel(self.GB_5)
 		self.value_ultrasonic.setGeometry(QtCore.QRect(240, 150, 91, 16))
 		self.value_ultrasonic.setStyleSheet("font-weight:light;\n"
-											"color:#FDC029;")
+"color:#FDC029;")
 		self.value_ultrasonic.setObjectName("value_ultrasonic")
 		self.LBL_25 = QtWidgets.QLabel(self.GB_5)
 		self.LBL_25.setGeometry(QtCore.QRect(340, 120, 61, 16))
@@ -203,22 +203,22 @@ class Ui_Form(QtWidgets.QWidget):
 		self.value_rotation = QtWidgets.QLabel(self.GB_5)
 		self.value_rotation.setGeometry(QtCore.QRect(140, 210, 101, 16))
 		self.value_rotation.setStyleSheet("font-weight:light;\n"
-										  "color:#FDC029;")
+"color:#FDC029;")
 		self.value_rotation.setObjectName("value_rotation")
 		self.value_raw = QtWidgets.QLabel(self.GB_5)
 		self.value_raw.setGeometry(QtCore.QRect(700, 60, 61, 16))
 		self.value_raw.setStyleSheet("font-weight:light;\n"
-									 "color:#FDC029;")
+"color:#FDC029;")
 		self.value_raw.setObjectName("value_raw")
 		self.value_depth = QtWidgets.QLabel(self.GB_5)
 		self.value_depth.setGeometry(QtCore.QRect(740, 120, 71, 16))
 		self.value_depth.setStyleSheet("font-weight:light;\n"
-									   "color:#FDC029;")
+"color:#FDC029;")
 		self.value_depth.setObjectName("value_depth")
 		self.value_motion = QtWidgets.QLabel(self.GB_5)
 		self.value_motion.setGeometry(QtCore.QRect(160, 60, 91, 16))
 		self.value_motion.setStyleSheet("font-weight:light;\n"
-										"color:#FDC029;")
+"color:#FDC029;")
 		self.value_motion.setObjectName("value_motion")
 		self.LBL_18 = QtWidgets.QLabel(self.GB_5)
 		self.LBL_18.setGeometry(QtCore.QRect(60, 90, 121, 16))
@@ -239,7 +239,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.value_frame = QtWidgets.QLabel(self.GB_5)
 		self.value_frame.setGeometry(QtCore.QRect(740, 90, 51, 16))
 		self.value_frame.setStyleSheet("font-weight:light;\n"
-									   "color:#FDC029;")
+"color:#FDC029;")
 		self.value_frame.setObjectName("value_frame")
 		self.LBL_28 = QtWidgets.QLabel(self.GB_5)
 		self.LBL_28.setGeometry(QtCore.QRect(620, 90, 111, 16))
@@ -248,21 +248,29 @@ class Ui_Form(QtWidgets.QWidget):
 		self.value_distance = QtWidgets.QLabel(self.GB_5)
 		self.value_distance.setGeometry(QtCore.QRect(190, 90, 111, 16))
 		self.value_distance.setStyleSheet("font-weight:light;\n"
-										  "color:#FDC029;")
+"color:#FDC029;")
 		self.value_distance.setObjectName("value_distance")
 		self.value_3d_status = QtWidgets.QLabel(self.GB_5)
 		self.value_3d_status.setGeometry(QtCore.QRect(700, 150, 71, 16))
 		self.value_3d_status.setStyleSheet("font-weight:light;\n"
-										   "color:#FDC029;")
+"color:#FDC029;")
 		self.value_3d_status.setObjectName("value_3d_status")
 		self.title_1_2 = QtWidgets.QLabel(self.GB_5)
 		self.title_1_2.setGeometry(QtCore.QRect(310, 27, 101, 31))
-		self.title_1_2.setStyleSheet("color:#AA3D01;")
+		font = QtGui.QFont()
+		font.setFamily("Trebuchet MS")
+		font.setPointSize(-1)
+		font.setBold(False)
+		font.setItalic(False)
+		font.setWeight(50)
+		self.title_1_2.setFont(font)
+		self.title_1_2.setStyleSheet("color:#AA3D01;\n"
+"font: 13px;")
 		self.title_1_2.setObjectName("title_1_2")
 		self.value_mapping = QtWidgets.QLabel(self.GB_5)
 		self.value_mapping.setGeometry(QtCore.QRect(720, 180, 81, 16))
 		self.value_mapping.setStyleSheet("font-weight:light;\n"
-										 "color:#FDC029;")
+"color:#FDC029;")
 		self.value_mapping.setObjectName("value_mapping")
 		self.LBL_23 = QtWidgets.QLabel(self.GB_5)
 		self.LBL_23.setGeometry(QtCore.QRect(340, 60, 141, 16))
@@ -275,26 +283,34 @@ class Ui_Form(QtWidgets.QWidget):
 		self.value_blocks = QtWidgets.QLabel(self.GB_5)
 		self.value_blocks.setGeometry(QtCore.QRect(390, 90, 101, 16))
 		self.value_blocks.setStyleSheet("font-weight:light;\n"
-										"color:#FDC029;")
+"color:#FDC029;")
 		self.value_blocks.setObjectName("value_blocks")
 		self.value_block_size = QtWidgets.QLabel(self.GB_5)
 		self.value_block_size.setGeometry(QtCore.QRect(410, 120, 101, 16))
 		self.value_block_size.setStyleSheet("font-weight:light;\n"
-											"color:#FDC029;")
+"color:#FDC029;")
 		self.value_block_size.setObjectName("value_block_size")
 		self.value_percentage = QtWidgets.QLabel(self.GB_5)
 		self.value_percentage.setGeometry(QtCore.QRect(490, 60, 91, 16))
 		self.value_percentage.setStyleSheet("font-weight:light;\n"
-											"color:#FDC029;")
+"color:#FDC029;")
 		self.value_percentage.setObjectName("value_percentage")
 		self.title_1_1 = QtWidgets.QLabel(self.GB_5)
 		self.title_1_1.setGeometry(QtCore.QRect(30, 27, 91, 31))
-		self.title_1_1.setStyleSheet("color:#AA3D01;")
+		font = QtGui.QFont()
+		font.setFamily("Trebuchet MS")
+		font.setPointSize(-1)
+		font.setBold(False)
+		font.setItalic(False)
+		font.setWeight(50)
+		self.title_1_1.setFont(font)
+		self.title_1_1.setStyleSheet("color:#AA3D01;\n"
+"font: 13px;")
 		self.title_1_1.setObjectName("title_1_1")
 		self.value_mapped = QtWidgets.QLabel(self.GB_5)
 		self.value_mapped.setGeometry(QtCore.QRect(450, 150, 91, 16))
 		self.value_mapped.setStyleSheet("font-weight:light;\n"
-										"color:#FDC029;")
+"color:#FDC029;")
 		self.value_mapped.setObjectName("value_mapped")
 		self.LBL_29 = QtWidgets.QLabel(self.GB_5)
 		self.LBL_29.setGeometry(QtCore.QRect(620, 120, 111, 16))
@@ -311,12 +327,89 @@ class Ui_Form(QtWidgets.QWidget):
 		self.value_location = QtWidgets.QLabel(self.GB_5)
 		self.value_location.setGeometry(QtCore.QRect(140, 180, 81, 16))
 		self.value_location.setStyleSheet("font-weight:light;\n"
-										  "color:#FDC029;")
+"color:#FDC029;")
 		self.value_location.setObjectName("value_location")
 		self.title_1_3 = QtWidgets.QLabel(self.GB_5)
 		self.title_1_3.setGeometry(QtCore.QRect(590, 27, 81, 21))
-		self.title_1_3.setStyleSheet("color:#AA3D01;")
+		font = QtGui.QFont()
+		font.setFamily("Trebuchet MS")
+		font.setPointSize(-1)
+		font.setBold(False)
+		font.setItalic(False)
+		font.setWeight(50)
+		self.title_1_3.setFont(font)
+		self.title_1_3.setStyleSheet("color:#AA3D01;\n"
+"font: 13px;")
 		self.title_1_3.setObjectName("title_1_3")
+		self.FinalGroupBox = QtWidgets.QGroupBox(self.frame_4)
+		self.FinalGroupBox.setGeometry(QtCore.QRect(860, 10, 361, 261))
+		font = QtGui.QFont()
+		font.setPointSize(11)
+		self.FinalGroupBox.setFont(font)
+		self.FinalGroupBox.setObjectName("FinalGroupBox")
+		self.LBL_vertices = QtWidgets.QLabel(self.FinalGroupBox)
+		self.LBL_vertices.setGeometry(QtCore.QRect(50, 60, 61, 16))
+		self.LBL_vertices.setStyleSheet("color: #eee;")
+		self.LBL_vertices.setObjectName("LBL_vertices")
+		self.LBL_edges = QtWidgets.QLabel(self.FinalGroupBox)
+		self.LBL_edges.setGeometry(QtCore.QRect(220, 60, 47, 13))
+		self.LBL_edges.setStyleSheet("color: #eee;")
+		self.LBL_edges.setObjectName("LBL_edges")
+		self.LBL_face = QtWidgets.QLabel(self.FinalGroupBox)
+		self.LBL_face.setGeometry(QtCore.QRect(50, 100, 47, 13))
+		self.LBL_face.setStyleSheet("color: #eee;")
+		self.LBL_face.setObjectName("LBL_face")
+		self.value_vert = QtWidgets.QLabel(self.FinalGroupBox)
+		self.value_vert.setGeometry(QtCore.QRect(110, 60, 71, 16))
+		self.value_vert.setAlignment(QtCore.Qt.AlignCenter)
+		self.value_vert.setObjectName("value_vert")
+		self.value_edge = QtWidgets.QLabel(self.FinalGroupBox)
+		self.value_edge.setGeometry(QtCore.QRect(270, 60, 71, 16))
+		self.value_edge.setAlignment(QtCore.Qt.AlignCenter)
+		self.value_edge.setObjectName("value_edge")
+		self.value_face = QtWidgets.QLabel(self.FinalGroupBox)
+		self.value_face.setGeometry(QtCore.QRect(100, 100, 71, 16))
+		self.value_face.setAlignment(QtCore.Qt.AlignCenter)
+		self.value_face.setObjectName("value_face")
+		self.title_1_4 = QtWidgets.QLabel(self.FinalGroupBox)
+		self.title_1_4.setGeometry(QtCore.QRect(20, 27, 81, 21))
+		font = QtGui.QFont()
+		font.setFamily("Trebuchet MS")
+		font.setPointSize(-1)
+		font.setBold(False)
+		font.setItalic(False)
+		font.setWeight(50)
+		self.title_1_4.setFont(font)
+		self.title_1_4.setStyleSheet("color:#AA3D01;\n"
+"font: 13px;")
+		self.title_1_4.setObjectName("title_1_4")
+		self.verticalLayoutWidget = QtWidgets.QWidget(self.FinalGroupBox)
+		self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 149, 361, 91))
+		self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+		self.verticalLayout_2 = QtWidgets.QVBoxLayout(
+			self.verticalLayoutWidget)
+		self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+		self.verticalLayout_2.setObjectName("verticalLayout_2")
+		self.BTN_explore_3 = QtWidgets.QPushButton(self.verticalLayoutWidget)
+		self.BTN_explore_3.setMinimumSize(QtCore.QSize(150, 26))
+		self.BTN_explore_3.setMaximumSize(QtCore.QSize(150, 45))
+		self.BTN_explore_3.setStyleSheet("color:rgb(0,200,0);\n"
+"font-family:Trebuchet MS;\n"
+"font-size:14px; ")
+		self.BTN_explore_3.setAutoDefault(False)
+		self.BTN_explore_3.setObjectName("BTN_explore_3")
+		self.verticalLayout_2.addWidget(
+			self.BTN_explore_3, 0, QtCore.Qt.AlignHCenter)
+		self.BTN_explore = QtWidgets.QPushButton(self.verticalLayoutWidget)
+		self.BTN_explore.setMinimumSize(QtCore.QSize(150, 26))
+		self.BTN_explore.setMaximumSize(QtCore.QSize(150, 45))
+		self.BTN_explore.setStyleSheet("color:rgb(0,200,0);\n"
+"font-family:Trebuchet MS;\n"
+"font-size:14px; ")
+		self.BTN_explore.setAutoDefault(False)
+		self.BTN_explore.setObjectName("BTN_explore")
+		self.verticalLayout_2.addWidget(
+			self.BTN_explore, 0, QtCore.Qt.AlignHCenter)
 		self.gridLayout.addWidget(self.frame_4, 2, 1, 1, 2)
 		self.frame = QtWidgets.QFrame(Form)
 		self.frame.setMinimumSize(QtCore.QSize(453, 281))
@@ -336,13 +429,13 @@ class Ui_Form(QtWidgets.QWidget):
 		self.value_status = QtWidgets.QLabel(self.GB_1)
 		self.value_status.setGeometry(QtCore.QRect(140, 160, 91, 16))
 		self.value_status.setStyleSheet("font-weight:light;\n"
-										"color:rgb(220,0,0);")
+"color:rgb(220,0,0);")
 		self.value_status.setAlignment(QtCore.Qt.AlignCenter)
 		self.value_status.setObjectName("value_status")
 		self.value_battery = QtWidgets.QLabel(self.GB_1)
 		self.value_battery.setGeometry(QtCore.QRect(140, 210, 91, 16))
 		self.value_battery.setStyleSheet("font-weight:light;\n"
-										 "color:rgb(220,0,0);")
+"color:rgb(220,0,0);")
 		self.value_battery.setAlignment(QtCore.Qt.AlignCenter)
 		self.value_battery.setObjectName("value_battery")
 		self.LBL_1 = QtWidgets.QLabel(self.GB_1)
@@ -356,31 +449,31 @@ class Ui_Form(QtWidgets.QWidget):
 		self.INP_ip = QtWidgets.QLineEdit(self.GB_1)
 		self.INP_ip.setGeometry(QtCore.QRect(70, 70, 120, 26))
 		self.INP_ip.setStyleSheet("background-color:#292929;\n"
-								  "color:#ffffff;\n"
-								  "font-family:Trebuchet MS;\n"
-								  "font-size:12px; \n"
-								  "border-radius:2px;")
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;")
 		self.INP_ip.setCursorPosition(0)
 		self.INP_ip.setAlignment(QtCore.Qt.AlignCenter)
 		self.INP_ip.setObjectName("INP_ip")
 		self.INP_port = QtWidgets.QLineEdit(self.GB_1)
 		self.INP_port.setGeometry(QtCore.QRect(70, 110, 121, 26))
 		self.INP_port.setStyleSheet("background-color:#292929;\n"
-									"color:#ffffff;\n"
-									"font-family:Trebuchet MS;\n"
-									"font-size:12px; \n"
-									"border-radius:2px;")
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;")
 		self.INP_port.setAlignment(QtCore.Qt.AlignCenter)
 		self.INP_port.setObjectName("INP_port")
 		self.BTN_connect = QtWidgets.QPushButton(self.GB_1)
-		self.BTN_connect.setGeometry(QtCore.QRect(210, 90, 95, 26))
-		self.BTN_connect.setMinimumSize(QtCore.QSize(95, 26))
+		self.BTN_connect.setGeometry(QtCore.QRect(210, 80, 95, 35))
+		self.BTN_connect.setMinimumSize(QtCore.QSize(95, 35))
 		self.BTN_connect.setStyleSheet("color:#eee;")
 		self.BTN_connect.setObjectName("BTN_connect")
 		self.title_1 = QtWidgets.QLabel(self.GB_1)
 		self.title_1.setGeometry(QtCore.QRect(50, 30, 181, 31))
 		self.title_1.setStyleSheet("color:#AA3D01;\n"
-								   "font-size:15px;")
+"font-size:15px;")
 		self.title_1.setObjectName("title_1")
 		self.gridLayout.addWidget(self.frame, 0, 0, 1, 1)
 		self.frame_5 = QtWidgets.QFrame(Form)
@@ -397,16 +490,10 @@ class Ui_Form(QtWidgets.QWidget):
 		self.GB_6.setStyleSheet("color:#e91;")
 		self.GB_6.setAlignment(QtCore.Qt.AlignCenter)
 		self.GB_6.setObjectName("GB_6")
-		
-		self.path_widget=MapView()
-		grid = QVBoxLayout()
-		grid.addWidget(self.path_widget)
-		self.GB_6.setLayout(grid)
-
-		#self.path_widget = QtWidgets.QWidget(self.GB_6)
-		#self.path_widget.setGeometry(QtCore.QRect(10, 30, 411, 541))
-		#self.path_widget.setAutoFillBackground(False)
-		#self.path_widget.setStyleSheet("background-color:#000;")
+		self.path_widget = QtWidgets.QWidget(self.GB_6)
+		self.path_widget.setGeometry(QtCore.QRect(10, 40, 500, 500))
+		self.path_widget.setAutoFillBackground(False)
+		self.path_widget.setStyleSheet("background-color:#000;")
 		self.path_widget.setObjectName("path_widget")
 		self.verticalLayout_4.addWidget(self.GB_6)
 		self.gridLayout.addWidget(self.frame_5, 0, 2, 2, 1)
@@ -426,7 +513,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.title_2 = QtWidgets.QLabel(self.GB_2)
 		self.title_2.setGeometry(QtCore.QRect(80, 30, 121, 31))
 		self.title_2.setStyleSheet("color:#AA3D01;\n"
-								   "font-size:15px;")
+"font-size:15px;")
 		self.title_2.setObjectName("title_2")
 		self.LBL_3 = QtWidgets.QLabel(self.GB_2)
 		self.LBL_3.setGeometry(QtCore.QRect(100, 70, 47, 13))
@@ -538,12 +625,12 @@ class Ui_Form(QtWidgets.QWidget):
 			self.horizontalLayoutWidget)
 		self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
 		self.horizontalLayout.setObjectName("horizontalLayout")
-		self.BTN_search_2 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-		self.BTN_search_2.setMinimumSize(QtCore.QSize(180, 26))
-		self.BTN_search_2.setMaximumSize(QtCore.QSize(180, 16777215))
-		self.BTN_search_2.setObjectName("BTN_search_2")
+		self.BTN_search = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+		self.BTN_search.setMinimumSize(QtCore.QSize(180, 26))
+		self.BTN_search.setMaximumSize(QtCore.QSize(180, 16777215))
+		self.BTN_search.setObjectName("BTN_search")
 		self.horizontalLayout.addWidget(
-			self.BTN_search_2, 0, QtCore.Qt.AlignHCenter)
+			self.BTN_search, 0, QtCore.Qt.AlignHCenter)
 		self.BTN_abort_search = QtWidgets.QPushButton(
 			self.horizontalLayoutWidget)
 		self.BTN_abort_search.setMinimumSize(QtCore.QSize(180, 26))
@@ -585,7 +672,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.frame_6.setMidLineWidth(0)
 		self.frame_6.setObjectName("frame_6")
 		self.layoutWidget = QtWidgets.QWidget(self.frame_6)
-		self.layoutWidget.setGeometry(QtCore.QRect(10, 0, 1571, 22))
+		self.layoutWidget.setGeometry(QtCore.QRect(10, 0, 1661, 22))
 		self.layoutWidget.setObjectName("layoutWidget")
 		self.horizontalLayout_17 = QtWidgets.QHBoxLayout(self.layoutWidget)
 		self.horizontalLayout_17.setContentsMargins(0, 0, 0, 0)
@@ -651,21 +738,18 @@ class Ui_Form(QtWidgets.QWidget):
 		self.horizontalLayout_5.addWidget(self.BTN_edge)
 		self.img_widget = QtWidgets.QWidget(self.GB_4)
 		self.img_widget.setGeometry(QtCore.QRect(10, 40, 640, 480))
-		# self.img_widget.setAutoFillBackground(False)
-		# self.img_widget.setStyleSheet("background-color:#000;")
+		self.img_widget.setAutoFillBackground(False)
+		self.img_widget.setStyleSheet("background-color:#000;")
 		self.img_widget.setObjectName("img_widget")
 		self.verticalLayout.addWidget(self.GB_4)
 		self.gridLayout.addWidget(self.frame_3, 0, 1, 2, 1)
-
-		# if self.manualControlStatus == 1:
-		# 	self.grabKeyboard()
 
 		# Button Action Assignment
 		# Action and Input side buttons
 		# connect button
 		self.BTN_connect.clicked.connect(self.connect)
 		# # start exploration button(gonna be BTN_search)
-		self.BTN_search_2.clicked.connect(self.startSearch)
+		self.BTN_search.clicked.connect(self.startSearch)
 		# # # abort exploration button
 		# self.BTN_abort_search.clicked.connect(self.abortSearch)
 		# # # check system button
@@ -682,8 +766,10 @@ class Ui_Form(QtWidgets.QWidget):
 		self.BTN_edge.clicked.connect(self.changeFeedToEdge)
 
 		# 3D Viewing
-		# Explore 3D button(gonna be BTN_explore)
-		self.BTN_8.clicked.connect(self.explore3D)
+		# preview button
+		self.BTN_explore_3.clicked.connect(self.explore3D)
+		# Export button
+		self.BTN_explore.clicked.connect(self.export)
 
 		self.window_width = self.img_widget.frameSize().width()
 		self.window_height = self.img_widget.frameSize().height()
@@ -695,7 +781,6 @@ class Ui_Form(QtWidgets.QWidget):
 	def retranslateUi(self, Form):
 		_translate = QtCore.QCoreApplication.translate
 		Form.setWindowTitle(_translate("Form", "Prometheus"))
-		self.BTN_8.setText(_translate("Form", "Explore 3D"))
 		self.GB_5.setTitle(_translate("Form", " Information "))
 		self.LBL_19.setText(_translate("Form", "   Average Speed :"))
 		self.LBL_24.setText(_translate("Form", "Blocks :"))
@@ -730,6 +815,16 @@ class Ui_Form(QtWidgets.QWidget):
 		self.LBL_26.setText(_translate("Form", "Mapped Volume :"))
 		self.value_location.setText(_translate("Form", "--"))
 		self.title_1_3.setText(_translate("Form", "General"))
+		self.FinalGroupBox.setTitle(_translate("Form", " Model "))
+		self.LBL_vertices.setText(_translate("Form", "Vertices : "))
+		self.LBL_edges.setText(_translate("Form", "Edges :"))
+		self.LBL_face.setText(_translate("Form", "Faces :"))
+		self.value_vert.setText(_translate("Form", "--"))
+		self.value_edge.setText(_translate("Form", "--"))
+		self.value_face.setText(_translate("Form", "--"))
+		self.title_1_4.setText(_translate("Form", "Mesh Data"))
+		self.BTN_explore_3.setText(_translate("Form", "Preview"))
+		self.BTN_explore.setText(_translate("Form", "Export"))
 		self.GB_1.setTitle(_translate("Form", " Connect Vehicle "))
 		self.value_status.setText(_translate("Form", "Unconnected"))
 		self.value_battery.setText(_translate("Form", "--"))
@@ -739,8 +834,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.INP_port.setPlaceholderText(_translate("Form", "Port"))
 		self.BTN_connect.setText(_translate("Form", "Connect"))
 		self.title_1.setText(_translate("Form", "Add Vehicle"))
-		self.GB_6.setTitle(_translate(
-			"Form", " Vehicle Movement Visualization "))
+		self.GB_6.setTitle(_translate("Form", " Vehicle Movement Visualization "))
 		self.GB_2.setTitle(_translate("Form", " Navigation Parameters "))
 		self.title_2.setText(_translate("Form", "Boundaries"))
 		self.LBL_3.setText(_translate("Form", "Front :"))
@@ -748,25 +842,25 @@ class Ui_Form(QtWidgets.QWidget):
 		self.LBL_4.setText(_translate("Form", "Back :"))
 		self.LBL_6.setText(_translate("Form", "Left :"))
 		self.INP_front_length.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-													   "color:#ffffff;\n"
-													   "font-family:Trebuchet MS;\n"
-													   "font-size:12px; \n"
-													   "border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_back_length.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-													  "color:#ffffff;\n"
-													  "font-family:Trebuchet MS;\n"
-													  "font-size:12px; \n"
-													  "border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_right_length.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-													   "color:#ffffff;\n"
-													   "font-family:Trebuchet MS;\n"
-													   "font-size:12px; \n"
-													   "border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_left_length.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-													  "color:#ffffff;\n"
-													  "font-family:Trebuchet MS;\n"
-													  "font-size:12px; \n"
-													  "border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.LBL_13.setText(_translate("Form", "m"))
 		self.LBL_14.setText(_translate("Form", "m"))
 		self.LBL_15.setText(_translate("Form", "m"))
@@ -779,42 +873,42 @@ class Ui_Form(QtWidgets.QWidget):
 		self.LBL_11.setText(_translate("Form", "Cloud Scale :"))
 		self.LBL_12.setText(_translate("Form", "Slant Separation :"))
 		self.INP_model.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-												"color:#ffffff;\n"
-												"font-family:Trebuchet MS;\n"
-												"font-size:12px; \n"
-												"border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_model.setPlaceholderText(_translate("Form", "0 - 1"))
 		self.INP_bubble.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-												 "color:#ffffff;\n"
-												 "font-family:Trebuchet MS;\n"
-												 "font-size:12px; \n"
-												 "border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_bubble.setPlaceholderText(_translate("Form", "1 - 10 ODD"))
 		self.INP_block.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-												"color:#ffffff;\n"
-												"font-family:Trebuchet MS;\n"
-												"font-size:12px; \n"
-												"border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_block.setPlaceholderText(_translate("Form", "32 - 128"))
 		self.INP_point.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-												"color:#ffffff;\n"
-												"font-family:Trebuchet MS;\n"
-												"font-size:12px; \n"
-												"border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_point.setPlaceholderText(_translate("Form", "1 - 100"))
 		self.INP_cloud.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-												"color:#ffffff;\n"
-												"font-family:Trebuchet MS;\n"
-												"font-size:12px; \n"
-												"border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_cloud.setPlaceholderText(_translate("Form", "1 - 100"))
 		self.INP_slant.setStyleSheet(_translate("Form", "background-color:#292929;\n"
-												"color:#ffffff;\n"
-												"font-family:Trebuchet MS;\n"
-												"font-size:12px; \n"
-												"border-radius:2px;"))
+"color:#ffffff;\n"
+"font-family:Trebuchet MS;\n"
+"font-size:12px; \n"
+"border-radius:2px;"))
 		self.INP_slant.setPlaceholderText(_translate("Form", "0 - 10"))
-		self.BTN_search_2.setText(_translate("Form", "Begin Search"))
+		self.BTN_search.setText(_translate("Form", "Begin Search"))
 		self.BTN_abort_search.setText(_translate("Form", "Abort Search"))
 		self.BTN_check.setText(_translate("Form", "Check System"))
 		self.BTN_MC.setText(_translate("Form", "Switch To Manual Control"))
@@ -967,6 +1061,9 @@ class Ui_Form(QtWidgets.QWidget):
 			#sami
 			# open the 3D exploring window
 			pass
+
+	def export(self):
+		pass
 
 class OwnImageWidget(QtWidgets.QWidget):
 		def __init__(self, parent=None):

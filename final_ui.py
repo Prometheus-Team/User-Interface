@@ -153,12 +153,10 @@ class Ui_Form(QtWidgets.QWidget):
 "    font-size:12px;\n"
 "}\n"
 "\n"
-"QPushButton:disabled{ background-color: yellow; }\n"
-"QPushButton:pressed{ background-color: orange; }\n"
-"QPushButton:focus:pressed{ background-color: black; }\n"
-"QPushButton:focus{ background-color: rgb(0,220,0); }\n"
-"QPushButton:hover{ background-color: rgb(220,0,0); }\n"
-"QPushButton:checked{ background-color: pink; }")
+"QPushButton:disabled{ background-color: #888; }\n"
+"QPushButton:focus:pressed{ background-color: #000; }\n"
+"QPushButton:hover{ background-color: #2a2a2a; }\n"
+"QPushButton:checked{ background-color: #000; }")
 		self.gridLayout = QtWidgets.QGridLayout(Form)
 		self.gridLayout.setObjectName("gridLayout")
 		self.frame_4 = QtWidgets.QFrame(Form)
@@ -1060,6 +1058,7 @@ class Ui_Form(QtWidgets.QWidget):
 		ClientData.triggers.showModelTrigger = True
 
 	def export(self):
+		path = QtWidgets.QFileDialog.getOpenFileName(self, 'Save Model', ClientData.modelValues.exportPath, "OBJ files (*.obj)")
 		ClientData.triggers.exportModelTrigger = True
 
 

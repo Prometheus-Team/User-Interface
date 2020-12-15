@@ -490,12 +490,20 @@ class Ui_Form(QtWidgets.QWidget):
 		self.GB_6.setStyleSheet("color:#e91;")
 		self.GB_6.setAlignment(QtCore.Qt.AlignCenter)
 		self.GB_6.setObjectName("GB_6")
-		self.path_widget = QtWidgets.QWidget(self.GB_6)
-		self.path_widget.setGeometry(QtCore.QRect(10, 40, 500, 500))
-		self.path_widget.setAutoFillBackground(False)
-		self.path_widget.setStyleSheet("background-color:#000;")
+		
+		self.path_widget=MapView()
+		grid = QVBoxLayout()
+		grid.addWidget(self.path_widget)
+		self.GB_6.setLayout(grid)
+
+		#self.path_widget = QtWidgets.QWidget(self.GB_6)
+		#self.path_widget.setGeometry(QtCore.QRect(10, 40, 500, 500))
+		#self.path_widget.setAutoFillBackground(False)
+		#self.path_widget.setStyleSheet("background-color:#000;")
 		self.path_widget.setObjectName("path_widget")
 		self.verticalLayout_4.addWidget(self.GB_6)
+
+
 		self.gridLayout.addWidget(self.frame_5, 0, 2, 2, 1)
 		self.frame_2 = QtWidgets.QFrame(Form)
 		self.frame_2.setFrameShape(QtWidgets.QFrame.Panel)
@@ -1110,7 +1118,7 @@ class UpdateView(QtCore.QThread):
 				
 				#imageColored[250:429, 10:80]=[255,0,0]
 			self.updated.emit(imageColored)
-			sleep(3)
+			sleep(1)
 
 
 class MapView(QWidget):

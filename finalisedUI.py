@@ -51,6 +51,39 @@ class Ui_Form(QtWidgets.QWidget):
 		self.datasendIP = "192.168.0.134"
 		self.datasendPort = 8090
 
+		self.up = 0
+		self.down = 0
+		self.right = 0
+		self.left = 0
+
+	# def keyReleaseEvent(self, event):
+	# 	key = event.key()
+	# 	if key == 65:
+	# 		# need change
+	# 		# its left arrow button or its a button
+	# 		print("left arrow released A was pressed")
+	# 		utilities.sendDataThroughSocket(
+	# 			self.datasendIP, self.datasendPort, "move", "stop")
+	# 		self.left = 0
+	# 	elif key == 87:
+	# 		# its up arrow button or its w button
+	# 		print("up arrow released W was pressed")
+	# 		utilities.sendDataThroughSocket(
+	# 			self.datasendIP, self.datasendPort, "move", "stop")
+	# 		self.up = 0
+	# 	elif key == 68:
+	# 		# its right arrow button or its d button
+	# 		print("right arrow released D was pressed")
+	# 		utilities.sendDataThroughSocket(
+	# 			self.datasendIP, self.datasendPort, "move", "stop")
+	# 		self.right = 0
+	# 	elif key == 83:
+	# 		# its down arrow button or its s button
+	# 		print("down arrow released S was pressed")
+	# 		utilities.sendDataThroughSocket(
+	# 			self.datasendIP, self.datasendPort, "move", "stop")
+	# 		self.down = 0
+
 	def keyPressEvent(self, event):
 		print("key press event fired")
 		key = event.key()
@@ -58,27 +91,35 @@ class Ui_Form(QtWidgets.QWidget):
 		# if state in manual - need to be done
 		# might need to check connection but we can just send it dont care if we actually know its being recieved
 
-		if key == 16777234 or key == 65:
+		if self.left == 0 and key == 65:
 			# need change
 			# its left arrow button or its a button
 			print("left arrow pressed or button A was pressed")
 			utilities.sendDataThroughSocket(
 				self.datasendIP, self.datasendPort, "move", "left")
-		elif key == 16777235 or key == 87:
+			# self.left = 1
+		elif self.up == 0 and key == 87:
 			# its up arrow button or its w button
 			print("up arrow pressed or button W was pressed")
 			utilities.sendDataThroughSocket(
 				self.datasendIP, self.datasendPort, "move", "forward")
-		elif key == 16777236 or key == 68:
+			# self.up = 1
+		elif self.right == 0 and key == 68:
 			# its right arrow button or its d button
 			print("right arrow pressed or button D was pressed")
 			utilities.sendDataThroughSocket(
 				self.datasendIP, self.datasendPort, "move", "right")
-		elif key == 16777237 or key == 83:
+			# self.right = 1
+		elif self.down == 0 and key == 83:
 			# its down arrow button or its s button
 			print("down arrow pressed or button S was pressed")
 			utilities.sendDataThroughSocket(
 				self.datasendIP, self.datasendPort, "move", "backward")
+			# self.down = 1
+		elif key == 32:
+			print("spacebar was pressed")
+			utilities.sendDataThroughSocket(
+				self.datasendIP, self.datasendPort, "move", "stop")
 
 	def setupUi(self, Form):
 		Form.setObjectName("Form")

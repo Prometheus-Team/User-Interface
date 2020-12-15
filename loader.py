@@ -24,6 +24,7 @@ class Loader(threading.Thread):
 	def __init__(self, blitimage):
 		super().__init__()
 		self.blitimage = blitimage
+		self.setDaemon(True)
 		self.start()
 
 	def launchSplash(self):

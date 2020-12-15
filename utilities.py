@@ -131,11 +131,11 @@ def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHold
         # if len(dataholder) > 20:
         #     dataholder = dataholder[10:]
 
-        if len(processingDataHolder) > 10:
-            dataForReducer = processingDataHolder[:10]
-            processingDataHolder = processingDataHolder[10:]
-            reduceThread = threading.Thread(target=encapsFrameReducer, args=(dataForReducer,5,returningImageHolder), daemon=True)
-            reduceThread.start()
+        # if len(processingDataHolder) > 10:
+        #     dataForReducer = processingDataHolder[:10]
+        #     processingDataHolder = processingDataHolder[10:]
+        #     reduceThread = threading.Thread(target=encapsFrameReducer, args=(dataForReducer,5,returningImageHolder), daemon=True)
+        #     reduceThread.start()
 
     client_socket.close()
 

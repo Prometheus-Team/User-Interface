@@ -18,11 +18,10 @@ if __name__ == '__main__':
 import socket
 import pickle
 import threading
-import ui.utilities
-import utilities
-from client_data import *
+import ui.utilities as utilities
 import numpy as np
 import time
+import queue
 import cv2
 import concurrent.futures
 
@@ -33,6 +32,10 @@ from PyQt5.QtGui import QPixmap, QImage
 import numpy as np
 import sys
 from time import sleep
+
+
+
+from client_data import *
 
 class Ui_Form(QtWidgets.QWidget):
 
@@ -151,12 +154,10 @@ class Ui_Form(QtWidgets.QWidget):
 "    font-size:12px;\n"
 "}\n"
 "\n"
-"QPushButton:disabled{ background-color: yellow; }\n"
-"QPushButton:pressed{ background-color: orange; }\n"
-"QPushButton:focus:pressed{ background-color: black; }\n"
-"QPushButton:focus{ background-color: rgb(0,220,0); }\n"
-"QPushButton:hover{ background-color: rgb(220,0,0); }\n"
-"QPushButton:checked{ background-color: pink; }")
+"QPushButton:disabled{ background-color: #888; }\n"
+"QPushButton:focus:pressed{ background-color: #000; }\n"
+"QPushButton:hover{ background-color: #2a2a2a; }\n"
+"QPushButton:checked{ background-color: #000; }")
 		self.gridLayout = QtWidgets.QGridLayout(Form)
 		self.gridLayout.setObjectName("gridLayout")
 		self.frame_4 = QtWidgets.QFrame(Form)
@@ -1069,16 +1070,17 @@ class Ui_Form(QtWidgets.QWidget):
 			ClientData.uiInformation.viewType = 1
 
 	def explore3D(self):
-		if self.status3D == 1:
-			# sami
-			# open the 3D exploring window
-			pass
+		ClientData.triggers.showModelTrigger = True
 
 	def export(self):
 		saveFile.setShortcut("Ctrl+S")
         saveFile.setStatusTip('Save File')
         saveFile.triggered.connect(self.file_save)
 		
+		path = QtWidgets.QFileDialog.getOpenFileName(self, 'Save Model', ClientData.modelValues.exportPath, "OBJ files (*.obj)")
+		ClientData.triggers.exportModelTrigger = True
+
+
 
 class OwnImageWidget(QtWidgets.QWidget):
 		def __init__(self, parent=None):

@@ -1091,17 +1091,26 @@ class UpdateView(QtCore.QThread):
 	def __init__(self, parent=None):
 		super(UpdateView, self).__init__(parent)
 		self.img= np.zeros((500, 500), dtype=np.uint8)
+		
+
 	def run(self):
+		
+		obstacleColor=np.array([255,255,255])
+		empty=np.array([0,0,0])
+		droneColor=np.array([255,0,0])
+		imageColored=np.zeros((500, 500,3), dtype=np.uint8)
 		while True:
-			print(self.img[250][255])
-			if self.img[250][255]==255:
+			#print(imageColored[255][10])
+			if self.img[255][10]==1:
 				self.img = np.zeros((500, 500), dtype=np.uint8)
-				sleep(1)
+				imageColored=np.zeros((500, 500,3), dtype=np.uint8)
 			else:
-				self.img[250:499, 0:499] = 255
-				self.img[150:160,150:160]=150
-				sleep(1)
-			self.updated.emit(self.img)
+				self.img[250:499, 0:100] = 1
+				imageColored[self.img==1]=obstacleColor
+				
+				#imageColored[250:429, 10:80]=[255,0,0]
+			self.updated.emit(imageColored)
+			sleep(3)
 
 
 class MapView(QWidget):
@@ -1110,10 +1119,11 @@ class MapView(QWidget):
 		self.label = QLabel()
 		
 		self.updateView=UpdateView()
-		img = np.zeros((500, 500), dtype=np.uint8)
-		qImg = QPixmap(QImage(img.data, img.shape[0], img.shape[1], QImage.Format_Grayscale8))
-		self.label.setPixmap(qImg)
-		self.label.update()
+		img = np.zeros((500, 500,3), dtype=np.uint8)
+		img[100:200,100:200]=[255,0,0]
+
+		pin = QPixmap(QImage(img.data, img.shape[0], img.shape[1], QImage.Format_RGB888))
+		self.label.setPixmap(pin)
 		layout = QVBoxLayout()
 		layout.addWidget(self.label)
 		self.setLayout(layout)
@@ -1122,8 +1132,8 @@ class MapView(QWidget):
 		self.updateView.updated.connect(self.on_data_ready)
 		self.updateView.start()
 	def on_data_ready(self, data):
-		#print(data)
-		qImg = QPixmap(QImage(data.data, data.shape[0], data.shape[1], QImage.Format_Grayscale8))
+		print(data[255][10])
+		qImg = QPixmap(QImage(data.data, data.shape[0], data.shape[1], QImage.Format_RGB888))
 		self.label.setPixmap(qImg)
 		self.label.update()
 

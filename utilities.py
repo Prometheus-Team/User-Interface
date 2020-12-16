@@ -88,7 +88,9 @@ def identify(dxnNum):
         return "unknown"
 
 def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHolder, returningImageHolder):
-    URL = "http://192.168.0.147:8000/stream.mjpg"
+    ip = ClientData.connectionValues.ip.value;
+
+    URL = "http://" + str(ip) + ":8000/stream.mjpg"
     inputStream = cv2.VideoCapture(URL)
 
     while True:

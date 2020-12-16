@@ -20,7 +20,6 @@ import pickle
 import threading
 import ui.utilities as utilities
 import numpy as np
-import time
 import queue
 import cv2
 import concurrent.futures
@@ -29,11 +28,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton
 from PyQt5.QtGui import QPixmap, QImage
-import numpy as np
+
 import sys
-from time import sleep
 
-
+from ui.map2d import *
 
 from client_data import *
 
@@ -1166,9 +1164,4 @@ if __name__ == "__main__":
 	ui = Ui_Form()
 	ui.setupUi(Form)
 	Form.show()
-	# Threading added for the a socket server to recieve the information from the vehicle
-	# DataUiThread = threading.Thread(
-	# 	target=recieveDisplayInformationDataSocket, args=(DataUiIP, DataUiPort,), daemon=True)
-	# DataUiThread.start()
-	# end
 	sys.exit(app.exec_())

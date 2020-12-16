@@ -95,6 +95,7 @@ def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHold
         _ret, image = inputStream.read()
 
         imageHash = hashlib.sha1(image).hexdigest()
+        ClientData.uiInformation.waitingFrames.append(WaitingFrame(image, imageHash))
         dataholder.append(image)
 
         if len(dataholder) > 20:

@@ -963,8 +963,8 @@ class Ui_Form(QtWidgets.QWidget):
 			self.timer.start(1)
 			# try connection
 			try:
-				self.infoSocket = threading.Thread(target=utilities.recieveDisplayInformationDataSocket, args=(self,ip, port,self.infoHolderList,), daemon=True)
-				self.infoSocket.start()
+				# self.infoSocket = threading.Thread(target=utilities.recieveDisplayInformationDataSocket, args=(self,ip, port,self.infoHolderList,), daemon=True)
+				# self.infoSocket.start()
 				self.imageSocket = threading.Thread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
 				self.imageSocket.start()
 				self.connectionStatus = 1
@@ -1072,8 +1072,8 @@ class Ui_Form(QtWidgets.QWidget):
 
 	def export(self):
 		saveFile.setShortcut("Ctrl+S")
-        saveFile.setStatusTip('Save File')
-        saveFile.triggered.connect(self.file_save)
+		saveFile.setStatusTip('Save File')
+		saveFile.triggered.connect(self.file_save)
 		
 		path = QtWidgets.QFileDialog.getOpenFileName(self, 'Save Model', ClientData.modelValues.exportPath, "OBJ files (*.obj)")
 		ClientData.triggers.exportModelTrigger = True

@@ -39,16 +39,12 @@ class Ui_Form(QtWidgets.QWidget):
 
 	def __init__(self):
 		super().__init__()
-		self.connectionStatus = 0
-		self.manualControlStatus = 0
-		self.searchStatus = 0
 		self.status3D = 0
 		self.imageSocket = None
 		self.imageHolderList = []
 		self.infoSocket = None
 		self.infoHolderList = []
 		self.sendCmdSocket = None
-		self.searching = 1
 		self.feedTypeStatus = "raw"
 		self.processingDataHolder = []
 		self.processedImagesHolder = []
@@ -56,30 +52,43 @@ class Ui_Form(QtWidgets.QWidget):
 		self.datasendIP = "192.168.0.134"
 		self.datasendPort = 8090
 
+		#system states
+		self.connectionStatus = 0
+		self.manualControlStatus = 0
+		self.searchStatus = 0
+		self.checkSystemStatus = 0
+
 	def keyPressEvent(self, event):
 		print("key press event fired")
 		key = event.key()
 		# check if state is in manual control and there is a valid connection/socket to send the data through
 		# if state in manual - need to be done
 		# might need to check connection but we can just send it dont care if we actually know its being recieved
-
-		if key == 16777234 or key == 65:
-			#need change
-			# its left arrow button or its a button
-			print("left arrow pressed or button A was pressed")
-			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","left")
-		elif key == 16777235 or key == 87:
-			# its up arrow button or its w button
-			print("up arrow pressed or button W was pressed")
-			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","forward")
-		elif key == 16777236 or key == 68:
-			# its right arrow button or its d button
-			print("right arrow pressed or button D was pressed")
-			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","right")
-		elif key == 16777237 or key == 83:
-			# its down arrow button or its s button
-			print("down arrow pressed or button S was pressed")
-			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","backward")
+		try:
+			if key == 65:
+				#need change
+				# its left arrow button or its a button
+				print("left arrow pressed or button A was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","left")
+			elif key == 87:
+				# its up arrow button or its w button
+				print("up arrow pressed or button W was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","forward")
+			elif key == 68:
+				# its right arrow button or its d button
+				print("right arrow pressed or button D was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","right")
+			elif key == 83:
+				# its down arrow button or its s button
+				print("down arrow pressed or button S was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","backward")
+			elif key == 32:
+				# spacebar pressed
+				print("spacebar was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP, self.datasendPort, "move", "stop")
+		except:
+			print("direction commands not passing")
+			pass
 
 	def setupUi(self, Form):
 		Form.setObjectName("Form")
@@ -492,7 +501,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.GB_6.setStyleSheet("color:#e91;")
 		self.GB_6.setAlignment(QtCore.Qt.AlignCenter)
 		self.GB_6.setObjectName("GB_6")
-		
+
 		self.path_widget=MapView()
 		grid = QVBoxLayout()
 		grid.addWidget(self.path_widget)
@@ -761,9 +770,9 @@ class Ui_Form(QtWidgets.QWidget):
 		# # start exploration button(gonna be BTN_search)
 		self.BTN_search.clicked.connect(self.startSearch)
 		# # # abort exploration button
-		# self.BTN_abort_search.clicked.connect(self.abortSearch)
+		self.BTN_abort_search.clicked.connect(self.abortSearch)
 		# # # check system button
-		# self.BTN_check.clicked.connect(self.checkSystem)
+		self.BTN_check.clicked.connect(self.checkSystem)
 		# # # manual control button
 		self.BTN_MC.clicked.connect(self.manualControl)
 		# send packet notifiying the vehicle its going to be changed to manual control
@@ -930,7 +939,7 @@ class Ui_Form(QtWidgets.QWidget):
 		self.BTN_raw.setText(_translate("Form", "Raw"))
 		self.BTN_depth.setText(_translate("Form", "Depth"))
 		self.BTN_edge.setText(_translate("Form", "Edge"))
-	
+
 	def update_frame(self):
 		# print("update frame called")
 		if len(self.imageHolderList) > 0:
@@ -961,96 +970,115 @@ class Ui_Form(QtWidgets.QWidget):
 			self.timer = QtCore.QTimer(self)
 			self.timer.timeout.connect(self.update_frame)
 			self.timer.start(1)
+			self.connectionStatus = 0
+			self.manualControlStatus = 0
+			self.searchStatus = 0
+			self.checkSystemStatus = 0
+			self.value_status.setText("Disconnected")
+			self.value_status.setStyleSheet("color:rgb(220,0,0);")
 			# try connection
 			try:
 				# self.infoSocket = threading.Thread(target=utilities.recieveDisplayInformationDataSocket, args=(self,ip, port,self.infoHolderList,), daemon=True)
 				# self.infoSocket.start()
 				self.imageSocket = threading.Thread(target=utilities.imageRecievingClient, args=(self, self.vehicleIP,self.vehiclePort,self.feedTypeStatus,self.imageHolderList,self.processingDataHolder,self.processedImagesHolder,), daemon=True)
 				self.imageSocket.start()
-				self.connectionStatus = 1
-				self.value_status.setText("Connected")
-				self.value_status.setStyle.setStyleSheet("color:rgb(0,220,0);")
+				if True:
+					self.connectionStatus = 1
+					self.value_status.setText("Connected")
+					self.value_status.setStyleSheet("color:rgb(0,220,0);")
+				else:
+					raise ValueError
 			# if connection set self.connectionStatus = 1
 			except:
+				self.connectionStatus = 0
 				#send error
 				pass
 
 	def startSearch(self):
-		self.status3D = 0
-		self.releaseKeyboard()
 		navigation_input_dict = {"frontDist":self.INP_front_length.text(),"backDist":self.INP_back_length.text(),"rightDist":self.INP_right_length.text(),"leftDist":self.INP_left_length.text()}
 		mapping_input_dict = {"model":self.INP_model.text(),"bubble":self.INP_bubble.text(),"block":self.INP_block.text(),"point":self.INP_point.text(),"cloud":self.INP_cloud.text(),"slant":self.INP_slant.text()}
 
-		if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.connectionStatus == 1:
-			# self.manualcontrolstatus = 0
+		if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.connectionStatus == 1 and self.checkSystemStatus == 0:
 			try:
-				distanceData = {'up': self.INP_front_length.text(), 'down':self.INP_back_length.text(), 'left':self.INP_left_length.text(), 'right':self.INP_right_length.text()}
+				distanceData = {'up': int(self.INP_front_length.text()), 'down':int(self.INP_back_length.text()), 'left':int(self.INP_left_length.text()), 'right':int(self.INP_right_length.text())}
 				with concurrent.futures.ThreadPoolExecutor() as executor:
-					future = executor.submit(utilities.sendDataThroughSocket, (datasendIP, datasendPort, "startExplore"))
+					future = executor.submit(utilities.sendDataThroughSocket, self.datasendIP, self.datasendPort, "startExplore", distanceData)
 					status = future.result()
-					if status == 1:
+					if status == True:
 						self.manualControlStatus = 0
 						self.searching = 1
+						self.status3D = 0
+						self.releaseKeyboard()
+						self.value_18.setText("Exploring")
+						self.value_18.setStyleSheet('color:rgb(0,220,0);')
 					else:
-						raise EnvironmentError
+						self.value_18.setText("Start Exploration Failed")
+						self.value_18.setStyleSheet('color:rgb(220,0,0);')
+						raise ValueError
 			except:
-				print("abort problem happened")
-			#SAMI
-			# start search
-			# update search status set self.searching = 1
-			# pass
+				print("search Failed !")
 
 	def abortSearch(self):
-		if self.searchStatus == 1:
 		# 	#send abort command to drone
+		if self.searchStatus == 1 and self.connectionStatus == 1 and self.checkSystemStatus == 0:
 			try:
 				with concurrent.futures.ThreadPoolExecutor() as executor:
-					future = executor.submit(utilities.sendDataThroughSocket, (datasendIP, datasendPort, "abortExplore", ""))
+					future = executor.submit(utilities.sendDataThroughSocket, self.datasendIP, self.datasendPort, "abortExplore", "")
 					status = future.result()
-					if status == 1:
+					if status == True:
 						self.searching = 0
 						self.searchStatus = 0
+						self.value_18.setText("Exploration Aborted")
+						self.value_18.setStyleSheet('color:rgb(0,220,0);')
 					else:
-						raise EnvironmentError
+						self.value_18.setText("Abort Exploration Failed")
+						self.value_18.setStyleSheet('color:rgb(220,0,0);')
+						raise ValueError
 			except:
-				print("abort problem happened")
-		# 	# assign self.searchstatus when drone approval comes
+				print("abort Failed !")
 
 	def checkSystem(self):
-		if self.searchStatus != 1 and self.connectionStatus == 1:
-			self.checkSystem = 1
-		# send checksystem command to vehicle
+		if self.searchStatus != 1 and self.connectionStatus == 1 and self.checkSystemStatus == 0:
 			try:
-				# configure to wait for approval
+				self.checkSystemStatus = 1
+				self.value_18.setText("Checking System")
+				self.value_18.setStyleSheet('color:rgb(0,220,0);')
 				with concurrent.futures.ThreadPoolExecutor() as executor:
-					future = executor.submit(utilities.sendDataThroughSocketCheckSystem, ('192.168.1.111', '8000', "checkSystem", ""))
+					future = executor.submit(utilities.sendDataThroughSocket, self.datasendIP, self.datasendPort, "checkSystem", "")
 					status = future.result()
-					if status == 1:
+					if status == True:
 						QtWidgets.QMessageBox.information(self, "Check System", "Check System Successful")
+						self.checkSystemStatus = 0
+						self.value_18.setText("IDLE")
+						self.value_18.setStyleSheet('color:#e91;')
 					else:
 						QtWidgets.QMessageBox.information(self, "Check System", "Check System Failed")
-						raise EnvironmentError
+						self.checkSystemStatus = 0
+						self.value_18.setText("Check System Failed")
+						self.value_18.setStyleSheet('color:rgb(220,0,0);')
+						raise ValueError
 			except:
-				self.checkSystem = 0
-				print("check system problem happened")
-		self.checkSystem = 0
-		# get output message saying check system complete from vehicle and assign it to message
-		message = "Check System was successful"
-		
+					print("check system Failed !")
+			# self.checkSystem = 0
+			# get output message saying check system complete from vehicle and assign it to message
+			# message = "Check System was successful"
+
 
 	def manualControl(self):
-		if self.manualControlStatus == 0 and self.connectionStatus == 1:
+		if self.manualControlStatus == 0 and self.connectionStatus == 1 and self.checkSystemStatus == 0:
 			try:
 				with concurrent.futures.ThreadPoolExecutor() as executor:
 					future = executor.submit(utilities.sendDataThroughSocket,(self.datasendIP,self.datasendPort, "manualControlChange", True))
 					status = future.result()
-					if status == 1:
+					if status == True:
 						self.manualControlStatus = 1
 						self.grabKeyboard()
-						QtWidgets.QMessageBox.information(self, "Manual Control", "Manual Control Successful")
+						self.value_18.setText("Manual Control")
+						self.value_18.setStyleSheet('color:rgb(0,220,0);')
 					else:
-						QtWidgets.QMessageBox.information(self, "Manual Control", "Manual Control Failed")
-						raise EnvironmentError
+						self.value_18.setText("Manual Control Failed")
+						self.value_18.setStyleSheet('color:rgb(220,0,0);')
+						raise ValueError
 			except:
 				print("manual control failure")
 
@@ -1071,10 +1099,6 @@ class Ui_Form(QtWidgets.QWidget):
 		ClientData.triggers.showModelTrigger = True
 
 	def export(self):
-		saveFile.setShortcut("Ctrl+S")
-		saveFile.setStatusTip('Save File')
-		saveFile.triggered.connect(self.file_save)
-		
 		path = QtWidgets.QFileDialog.getOpenFileName(self, 'Save Model', ClientData.modelValues.exportPath, "OBJ files (*.obj)")
 		ClientData.triggers.exportModelTrigger = True
 
@@ -1086,9 +1110,4 @@ if __name__ == "__main__":
 	ui = Ui_Form()
 	ui.setupUi(Form)
 	Form.show()
-	# Threading added for the a socket server to recieve the information from the vehicle
-	# DataUiThread = threading.Thread(
-	# 	target=recieveDisplayInformationDataSocket, args=(DataUiIP, DataUiPort,), daemon=True)
-	# DataUiThread.start()
-	# end
 	sys.exit(app.exec_())

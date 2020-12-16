@@ -64,24 +64,31 @@ class Ui_Form(QtWidgets.QWidget):
 		# check if state is in manual control and there is a valid connection/socket to send the data through
 		# if state in manual - need to be done
 		# might need to check connection but we can just send it dont care if we actually know its being recieved
-
-		if key == 65:
-			#need change
-			# its left arrow button or its a button
-			print("left arrow pressed or button A was pressed")
-			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","left")
-		elif key == 87:
-			# its up arrow button or its w button
-			print("up arrow pressed or button W was pressed")
-			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","forward")
-		elif key == 68:
-			# its right arrow button or its d button
-			print("right arrow pressed or button D was pressed")
-			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","right")
-		elif key == 83:
-			# its down arrow button or its s button
-			print("down arrow pressed or button S was pressed")
-			utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","backward")
+		try:
+			if key == 65:
+				#need change
+				# its left arrow button or its a button
+				print("left arrow pressed or button A was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","left")
+			elif key == 87:
+				# its up arrow button or its w button
+				print("up arrow pressed or button W was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","forward")
+			elif key == 68:
+				# its right arrow button or its d button
+				print("right arrow pressed or button D was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","right")
+			elif key == 83:
+				# its down arrow button or its s button
+				print("down arrow pressed or button S was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP,self.datasendPort,"move","backward")
+			elif key == 32:
+				# spacebar pressed
+				print("spacebar was pressed")
+				utilities.sendDataThroughSocket(self.datasendIP, self.datasendPort, "move", "stop")
+		except:
+			print("direction commands not passing")
+			pass
 
 	def setupUi(self, Form):
 		Form.setObjectName("Form")
@@ -1002,7 +1009,11 @@ class Ui_Form(QtWidgets.QWidget):
 						self.searching = 1
 						self.status3D = 0
 						self.releaseKeyboard()
+						self.value_18.setText("Exploring")
+						self.value_18.setStyleSheet('color:rgb(0,220,0);')
 					else:
+						self.value_18.setText("Start Exploration Failed")
+						self.value_18.setStyleSheet('color:rgb(220,0,0);')
 						raise ValueError
 			except:
 				print("search Failed !")
@@ -1017,7 +1028,11 @@ class Ui_Form(QtWidgets.QWidget):
 					if status == True:
 						self.searching = 0
 						self.searchStatus = 0
+						self.value_18.setText("Exploration Aborted")
+						self.value_18.setStyleSheet('color:rgb(0,220,0);')
 					else:
+						self.value_18.setText("Abort Exploration Failed")
+						self.value_18.setStyleSheet('color:rgb(220,0,0);')
 						raise ValueError
 			except:
 				print("abort Failed !")
@@ -1026,15 +1041,21 @@ class Ui_Form(QtWidgets.QWidget):
 		if self.searchStatus != 1 and self.connectionStatus == 1 and self.checkSystemStatus == 0:
 			try:
 				self.checkSystemStatus = 1
+				self.value_18.setText("Checking System")
+				self.value_18.setStyleSheet('color:rgb(0,220,0);')
 				with concurrent.futures.ThreadPoolExecutor() as executor:
 					future = executor.submit(utilities.sendDataThroughSocket, self.datasendIP, self.datasendPort, "checkSystem", "")
 					status = future.result()
 					if status == True:
 						QtWidgets.QMessageBox.information(self, "Check System", "Check System Successful")
 						self.checkSystemStatus = 0
+						self.value_18.setText("IDLE")
+						self.value_18.setStyleSheet('color:#e91;')
 					else:
 						QtWidgets.QMessageBox.information(self, "Check System", "Check System Failed")
 						self.checkSystemStatus = 0
+						self.value_18.setText("Check System Failed")
+						self.value_18.setStyleSheet('color:rgb(220,0,0);')
 						raise ValueError
 			except:
 					print("check system Failed !")
@@ -1052,9 +1073,11 @@ class Ui_Form(QtWidgets.QWidget):
 					if status == True:
 						self.manualControlStatus = 1
 						self.grabKeyboard()
-						QtWidgets.QMessageBox.information(self, "Manual Control", "Manual Control Successful")
+						self.value_18.setText("Manual Control")
+						self.value_18.setStyleSheet('color:rgb(0,220,0);')
 					else:
-						QtWidgets.QMessageBox.information(self, "Manual Control", "Manual Control Failed")
+						self.value_18.setText("Manual Control Failed")
+						self.value_18.setStyleSheet('color:rgb(220,0,0);')
 						raise ValueError
 			except:
 				print("manual control failure")

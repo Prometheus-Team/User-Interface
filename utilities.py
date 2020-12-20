@@ -216,6 +216,7 @@ def confirmIfObjFound(UIobj, objInNeed):
 			
 
 def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHolder, returningImageHolder):
+<<<<<<< HEAD
 	# URL = "http://192.168.0.147:8000/stream.mjpg"
 	# inputStream = cv2.VideoCapture(URL)
 
@@ -282,6 +283,77 @@ def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHold
 		#     reduceThread.start()
 
 	client_socket.close()
+=======
+    ip = ClientData.connectionValues.ip.value;
+
+    URL = "http://" + str(ip) + ":8000/stream.mjpg"
+    inputStream = cv2.VideoCapture(URL)
+
+    while True:
+        _ret, image = inputStream.read()
+
+        imageHash = hashlib.sha1(image).hexdigest()
+        ClientData.uiInformation.waitingFrames.append(WaitingFrame(image, imageHash))
+        dataholder.append(image)
+
+        if len(dataholder) > 20:
+            del dataholder[0:10]
+
+        time.sleep(0.01)
+
+    # port = int(port)
+    # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # # please change the ip address to your netowrks ip address
+    # client_socket.connect((ip, port))
+    # data = b""
+    # payload_size = struct.calcsize("Q")
+
+    # # while True:
+    # while True:
+    #     while len(data) < payload_size:
+    #         packet = client_socket.recv(4 * 1024)
+    #         if not packet: break
+    #         data += packet
+
+    #     packed_msg_size = data[:payload_size]
+    #     data = data[payload_size:]
+    #     msg_size = struct.unpack("Q", packed_msg_size)[0]
+
+    #     while len(data) < msg_size:
+    #         data += client_socket.recv(4*1024)
+    #     frame_data = data[:msg_size]
+    #     data = data[msg_size:]
+    #     frame = pickle.loads(frame_data)
+    #     myData = frame[-1][-1]
+    #     # print(dataRepresentation)
+    #     frame[-1][-1] = frame[-1][-2]
+    #     dataRepresentation = {'frame':frame,'x':myData[0],'y':myData[1],'heading':identify(myData[2])} 
+    #     processingDataHolder.append(dataRepresentation)
+    #     # cv2.imshow("Received", frame)
+    #     if ClientData.uiInformation.viewType == 1:
+    #         print("in edge in util")
+    #         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #         #threshold1 = high intensity gradient
+    #         #threshold2 = low intensity gradient
+    #         #apertureSize = 3 - 7 smooth and sharpening
+    #         #L2gradient = equation, False
+    #         edges = cv2.Canny(frame, threshold1=30, threshold2=100)
+    #         dataholder.append(edges)
+    #     elif ClientData.uiInformation.viewType == 0:
+    #         dataholder.append(frame)
+        
+        
+    #     # if len(dataholder) > 20:
+    #     #     dataholder = dataholder[10:]
+
+    #     # if len(processingDataHolder) > 10:
+    #     #     dataForReducer = processingDataHolder[:10]
+    #     #     processingDataHolder = processingDataHolder[10:]
+    #     #     reduceThread = threading.Thread(target=encapsFrameReducer, args=(dataForReducer,5,returningImageHolder), daemon=True)
+    #     #     reduceThread.start()
+
+    # client_socket.close()
+>>>>>>> 3e8cd57abc9bc828f9cf532fd289bba65f0c22e8
 
 
 def encapsFrameReducer(images, returnNum, resultHolder):

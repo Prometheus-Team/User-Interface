@@ -438,10 +438,12 @@ class Ui_Form(QtWidgets.QWidget):
 		self.groupBox.setFont(font)
 		self.groupBox.setStyleSheet("color:#e91;")
 		self.groupBox.setObjectName("groupBox")
-		self.INP_Obj_Name = QtWidgets.QLineEdit(self.groupBox)
-		self.INP_Obj_Name.setGeometry(QtCore.QRect(110, 30, 161, 20))
-		self.INP_Obj_Name.setAlignment(QtCore.Qt.AlignCenter)
-		self.INP_Obj_Name.setObjectName("INP_Obj_Name")
+		self.INP_Obj_Name = QtWidgets.QComboBox(self.groupBox)
+        self.INP_Obj_Name.setGeometry(QtCore.QRect(110, 30, 161, 22))
+        self.INP_Obj_Name.setEditable(False)
+        self.INP_Obj_Name.setCurrentText("")
+        self.INP_Obj_Name.setObjectName("INP_Obj_Name")
+        self.INP_Obj_Name.insertItems(0, utilities.supportedObjects)
 		self.LBL_36 = QtWidgets.QLabel(self.groupBox)
 		self.LBL_36.setGeometry(QtCore.QRect(20, 30, 81, 16))
 		self.LBL_36.setStyleSheet("color:#eee;")
@@ -1041,7 +1043,7 @@ class Ui_Form(QtWidgets.QWidget):
 		if utilities.validateNavInputs(navigation_input_dict) and utilities.validateMappingInputs(mapping_input_dict) and self.searching != 1 and self.connectionStatus == 1 and self.checkSystemStatus == 0:
 			self.LBL_Found.setText("Found")
 			self.LBL_Found.setStyleSheet("color:rgb(220,0,0);")
-			threading.Thread(target=utilities.confirmIfObjFound, args=(self.LBL_Found,self.INP_Obj_Name.text(),), daemon=True).start()
+			threading.Thread(target=utilities.confirmIfObjFound, args=(self.LBL_Found,self.INP_Obj_Name.currentText(),), daemon=True).start()
 			
 			try:
 				distanceData = {'up': int(self.INP_front_length.text()), 'down': int(self.INP_back_length.text(

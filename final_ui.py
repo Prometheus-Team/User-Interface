@@ -439,11 +439,11 @@ class Ui_Form(QtWidgets.QWidget):
 		self.groupBox.setStyleSheet("color:#e91;")
 		self.groupBox.setObjectName("groupBox")
 		self.INP_Obj_Name = QtWidgets.QComboBox(self.groupBox)
-        self.INP_Obj_Name.setGeometry(QtCore.QRect(110, 30, 161, 22))
-        self.INP_Obj_Name.setEditable(False)
-        self.INP_Obj_Name.setCurrentText("")
-        self.INP_Obj_Name.setObjectName("INP_Obj_Name")
-        self.INP_Obj_Name.insertItems(0, utilities.supportedObjects)
+		self.INP_Obj_Name.setGeometry(QtCore.QRect(110, 30, 161, 22))
+		self.INP_Obj_Name.setEditable(False)
+		self.INP_Obj_Name.setCurrentText("")
+		self.INP_Obj_Name.setObjectName("INP_Obj_Name")
+		self.INP_Obj_Name.insertItems(0, utilities.supportedObjects)
 		self.LBL_36 = QtWidgets.QLabel(self.groupBox)
 		self.LBL_36.setGeometry(QtCore.QRect(20, 30, 81, 16))
 		self.LBL_36.setStyleSheet("color:#eee;")
@@ -819,10 +819,6 @@ class Ui_Form(QtWidgets.QWidget):
 		self.window_height = self.img_widget.frameSize().height()
 		self.img_widget = OwnImageWidget(self.img_widget)
 
-		self.INP_ip.setText("192.168.0.103")
-		self.INP_port.setText("9999")
-		self.INP_Obj_Name.setText("laptop")
-
 		self.retranslateUi(Form)
 		QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -1044,7 +1040,7 @@ class Ui_Form(QtWidgets.QWidget):
 			self.LBL_Found.setText("Found")
 			self.LBL_Found.setStyleSheet("color:rgb(220,0,0);")
 			threading.Thread(target=utilities.confirmIfObjFound, args=(self.LBL_Found,self.INP_Obj_Name.currentText(),), daemon=True).start()
-			
+
 			try:
 				distanceData = {'up': int(self.INP_front_length.text()), 'down': int(self.INP_back_length.text(
 				)), 'left': int(self.INP_left_length.text()), 'right': int(self.INP_right_length.text())}

@@ -216,7 +216,6 @@ def confirmIfObjFound(UIobj, objInNeed):
 			
 
 def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHolder, returningImageHolder):
-<<<<<<< HEAD
 	# URL = "http://192.168.0.147:8000/stream.mjpg"
 	# inputStream = cv2.VideoCapture(URL)
 
@@ -282,24 +281,23 @@ def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHold
 		#     reduceThread = threading.Thread(target=encapsFrameReducer, args=(dataForReducer,5,returningImageHolder), daemon=True)
 		#     reduceThread.start()
 
-	client_socket.close()
-=======
-    ip = ClientData.connectionValues.ip.value;
+	# client_socket.close()
+    # ip = ClientData.connectionValues.ip.value;
 
-    URL = "http://" + str(ip) + ":8000/stream.mjpg"
-    inputStream = cv2.VideoCapture(URL)
+    # URL = "http://" + str(ip) + ":8000/stream.mjpg"
+    # inputStream = cv2.VideoCapture(URL)
 
-    while True:
-        _ret, image = inputStream.read()
+    # while True:
+    #     _ret, image = inputStream.read()
 
-        imageHash = hashlib.sha1(image).hexdigest()
-        ClientData.uiInformation.waitingFrames.append(WaitingFrame(image, imageHash))
-        dataholder.append(image)
+    #     imageHash = hashlib.sha1(image).hexdigest()
+    #     ClientData.uiInformation.waitingFrames.append(WaitingFrame(image, imageHash))
+    #     dataholder.append(image)
 
-        if len(dataholder) > 20:
-            del dataholder[0:10]
+    #     if len(dataholder) > 20:
+    #         del dataholder[0:10]
 
-        time.sleep(0.01)
+    #     time.sleep(0.01)
 
     # port = int(port)
     # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -353,7 +351,6 @@ def imageRecievingClient(self,ip, port,feedStatus,dataholder, processingDataHold
     #     #     reduceThread.start()
 
     # client_socket.close()
->>>>>>> 3e8cd57abc9bc828f9cf532fd289bba65f0c22e8
 
 
 def encapsFrameReducer(images, returnNum, resultHolder):
